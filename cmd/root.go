@@ -10,6 +10,9 @@ import (
 var rootCmd = &cobra.Command{
 	Use:   "mailbox-cli",
 	Short: "CLI client for mailbox",
+	Run: func(cmd *cobra.Command, args []string) {
+		cmd.Help()
+	},
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
