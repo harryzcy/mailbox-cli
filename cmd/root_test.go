@@ -14,7 +14,7 @@ func TestExecute(t *testing.T) {
 
 	c, err := rootCmd.ExecuteC()
 	assert.Nil(t, err)
-	assert.Equal(t, "CLI client for mailbox", c.Short)
+	assert.Equal(t, "Handle mailbox APIs from the command line.", c.Short)
 	assert.Contains(t, buf.String(), "Usage:")
 	assert.Contains(t, buf.String(), "Flags:")
 }

@@ -9,7 +9,7 @@ import (
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "mailbox-cli",
-	Short: "CLI client for mailbox",
+	Short: "Handle mailbox APIs from the command line.",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},
