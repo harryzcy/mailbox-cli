@@ -54,6 +54,18 @@ func TestUntrash(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestDelete(t *testing.T) {
+	_, err := Delete(DeleteOptions{
+		APIID:     "",
+		Region:    "",
+		Endpoint:  "https://httpbin.org/anything",
+		Verbose:   false,
+		MessageID: "messageID",
+	})
+
+	assert.Nil(t, err)
+}
+
 func TestSave(t *testing.T) {
 	_, err := Save(SaveOptions{
 		APIID:    "",
