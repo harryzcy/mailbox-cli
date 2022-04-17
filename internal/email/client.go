@@ -257,6 +257,39 @@ func (c *Client) Untrash(options UntrashOptions) (string, error) {
 	return string(result), nil
 }
 
+type DeleteOptions struct {
+	MessageID string
+}
+
+func (o DeleteOptions) check() error {
+	if o.MessageID == "" {
+		return errors.New("invalid message id")
+	}
+
+	return nil
+}
+
+func (c *Client) Delete(options DeleteOptions) (string, error) {
+	if err := options.check(); err != nil {
+		return "", err
+	}
+
+	if c.Verbose {
+		fmt.Printf("[DEBUG] Deleteing email\n")
+	}
+
+	ctx := context.Background()
+	err := c.loadCredentials(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	q := url.Values{}
+	result, err := c.request(ctx, http.MethodDelete, "/emails/"+options.MessageID, q, nil)
+
+	return string(result), nil
+}
+
 type SendOptions struct {
 	MessageID string
 }

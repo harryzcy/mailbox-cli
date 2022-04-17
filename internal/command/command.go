@@ -114,6 +114,32 @@ func Untrash(options UntrashOptions) (string, error) {
 	return result, err
 }
 
+type DeleteOptions struct {
+	// client options
+	APIID    string
+	Region   string
+	Endpoint string
+	Verbose  bool
+
+	// request options
+	MessageID string
+}
+
+func Delete(options DeleteOptions) (string, error) {
+	client := email.Client{
+		APIID:    options.APIID,
+		Region:   options.Region,
+		Endpoint: options.Endpoint,
+		Verbose:  options.Verbose,
+	}
+
+	result, err := client.Delete(email.DeleteOptions{
+		MessageID: options.MessageID,
+	})
+
+	return result, err
+}
+
 type SendOptions struct {
 	// client options
 	APIID    string

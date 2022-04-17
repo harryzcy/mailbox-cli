@@ -446,6 +446,76 @@ func TestClient_Untrash(t *testing.T) {
 	}
 }
 
+func TestDeleteOptions_Check(t *testing.T) {
+	tests := []struct {
+		options DeleteOptions
+		err     error
+	}{
+		{
+			options: DeleteOptions{},
+			err:     errors.New("invalid message id"),
+		},
+		{
+			options: DeleteOptions{
+				MessageID: "message-id",
+			},
+			err: nil,
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			err := test.options.check()
+			assert.Equal(t, test.err, err)
+		})
+	}
+}
+
+func TestClient_Delete(t *testing.T) {
+	tests := []struct {
+		client  Client
+		options DeleteOptions
+		err     error
+	}{
+		{
+			client: Client{
+				Endpoint: "https://httpbin.org/anything",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+				Verbose: true,
+			},
+			options: DeleteOptions{
+				MessageID: "message-id",
+			},
+			err: nil,
+		},
+		{
+			client: Client{
+				Verbose: true,
+			},
+			options: DeleteOptions{},
+			err:     errors.New("invalid message id"),
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			resp, err := test.client.Delete(test.options)
+			assert.Equal(t, test.err, err)
+			if err != nil {
+				return
+			}
+
+			assert.NotEmpty(t, resp)
+
+			var values map[string]interface{}
+			err = json.Unmarshal([]byte(resp), &values)
+			assert.Nil(t, err)
+		})
+	}
+}
+
 func TestSendOptions_Check(t *testing.T) {
 	tests := []struct {
 		options SendOptions
