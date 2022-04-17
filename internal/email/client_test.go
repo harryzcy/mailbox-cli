@@ -518,6 +518,137 @@ func TestClient_Delete(t *testing.T) {
 	}
 }
 
+func TestCreateOptions_Check(t *testing.T) {
+	tests := []struct {
+		options CreateOptions
+		err     error
+	}{
+		{
+			options: CreateOptions{},
+			err:     errors.New("invalid subject"),
+		},
+		{
+			options: CreateOptions{
+				Subject: "subject",
+			},
+			err: errors.New("invalid from"),
+		},
+		{
+			options: CreateOptions{
+				Subject: "subject",
+				From:    []string{"from"},
+			},
+			err: errors.New("invalid to"),
+		},
+		{
+			options: CreateOptions{
+				Subject: "subject",
+				From:    []string{"from"},
+				To:      []string{"to"},
+				Cc:      []string{"cc"},
+				Bcc:     []string{"bcc"},
+				ReplyTo: []string{"reply-to"},
+				Body:    "body",
+				Text:    "text",
+				HTML:    "html",
+			},
+			err: nil,
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			err := test.options.check()
+			assert.Equal(t, test.err, err)
+		})
+	}
+}
+
+func TestCreateOptions_LoadFile(t *testing.T) {
+	tests := []struct {
+		options CreateOptions
+		err     error
+	}{
+		{
+			options: CreateOptions{},
+			err:     nil,
+		},
+		{
+			options: CreateOptions{
+				File: "../../test/data/email.json",
+			},
+			err: nil,
+		},
+		{
+			options: CreateOptions{
+				File: "invalid.json",
+			},
+			err: &os.PathError{Op: "open", Path: "invalid.json", Err: syscall.ENOENT},
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			err := test.options.loadFile()
+			assert.Equal(t, test.err, err)
+		})
+	}
+}
+
+func TestClient_Create(t *testing.T) {
+	tests := []struct {
+		client  Client
+		options CreateOptions
+		err     error
+	}{
+		{
+			client: Client{
+				Endpoint: "https://httpbin.org/anything",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+				Verbose: true,
+			},
+			options: CreateOptions{
+				File: "../../test/data/email.json",
+			},
+			err: nil,
+		},
+		{
+			client: Client{
+				Verbose: true,
+			},
+			options: CreateOptions{},
+			err:     errors.New("invalid subject"),
+		},
+		{
+			client: Client{
+				Verbose: true,
+			},
+			options: CreateOptions{
+				File: "invalid.json",
+			},
+			err: &os.PathError{Op: "open", Path: "invalid.json", Err: syscall.ENOENT},
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			resp, err := test.client.Create(test.options)
+			assert.Equal(t, test.err, err)
+			if err != nil {
+				return
+			}
+
+			assert.NotEmpty(t, resp)
+
+			var values map[string]interface{}
+			err = json.Unmarshal([]byte(resp), &values)
+			assert.Nil(t, err)
+		})
+	}
+}
+
 func TestSaveOptions_Check(t *testing.T) {
 	tests := []struct {
 		options SaveOptions

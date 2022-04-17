@@ -140,6 +140,51 @@ func Delete(options DeleteOptions) (string, error) {
 	return result, err
 }
 
+type CreateOptions struct {
+	// client options
+	APIID    string
+	Region   string
+	Endpoint string
+	Verbose  bool
+
+	// request options
+	Subject string
+	From    []string
+	To      []string
+	Cc      []string
+	Bcc     []string
+	ReplyTo []string
+	Body    string
+	Text    string
+	HTML    string
+
+	File string
+}
+
+func Create(options CreateOptions) (string, error) {
+	client := email.Client{
+		APIID:    options.APIID,
+		Region:   options.Region,
+		Endpoint: options.Endpoint,
+		Verbose:  options.Verbose,
+	}
+
+	result, err := client.Create(email.CreateOptions{
+		Subject: options.Subject,
+		From:    options.From,
+		To:      options.To,
+		Cc:      options.Cc,
+		Bcc:     options.Bcc,
+		ReplyTo: options.ReplyTo,
+		Body:    options.Body,
+		Text:    options.Text,
+		HTML:    options.HTML,
+		File:    options.File,
+	})
+
+	return result, err
+}
+
 type SaveOptions struct {
 	// client options
 	APIID    string
