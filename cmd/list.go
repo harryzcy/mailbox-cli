@@ -1,12 +1,11 @@
 package cmd
 
 import (
-	"fmt"
-	"os"
-
-	"github.com/harryzcy/mailbox-cli/internal/email"
+	"github.com/harryzcy/mailbox-cli/internal/command"
 	"github.com/spf13/cobra"
 )
+
+var commandList = command.List
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
@@ -14,12 +13,12 @@ var listCmd = &cobra.Command{
 	Short: "List emails",
 	Run: func(cmd *cobra.Command, args []string) {
 		verbose, _ := cmd.Flags().GetBool("verbose")
-		client := email.Client{
-			APIID:   cmd.Flag("api-id").Value.String(),
-			Region:  cmd.Flag("region").Value.String(),
-			Verbose: verbose,
-		}
-		result, err := client.List(email.ListOptions{
+		result, err := commandList(command.ListOptions{
+			APIID:    cmd.Flag("api-id").Value.String(),
+			Region:   cmd.Flag("region").Value.String(),
+			Endpoint: cmd.Flag("endpoint").Value.String(),
+			Verbose:  verbose,
+
 			Type:       cmd.Flag("type").Value.String(),
 			Year:       cmd.Flag("year").Value.String(),
 			Month:      cmd.Flag("month").Value.String(),
@@ -27,10 +26,12 @@ var listCmd = &cobra.Command{
 			NextCursor: cmd.Flag("next-cursor").Value.String(),
 		})
 		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
+			cmd.PrintErrln(err)
+			osExit(1)
+			return
 		}
-		fmt.Println(result)
+
+		cmd.Println(result)
 	},
 }
 

@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var osExit = os.Exit
+
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "mailbox-cli",
@@ -27,5 +29,6 @@ func Execute() {
 func init() {
 	rootCmd.PersistentFlags().String("api-id", "", "API ID")
 	rootCmd.PersistentFlags().String("region", "", "Region")
+	rootCmd.PersistentFlags().String("endpoint", "", "Endpoint")
 	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "Verbose mode")
 }
