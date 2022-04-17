@@ -378,15 +378,15 @@ func TestClient_Trash(t *testing.T) {
 
 func TestUntrashOptions_Check(t *testing.T) {
 	tests := []struct {
-		options TrashOptions
+		options UntrashOptions
 		err     error
 	}{
 		{
-			options: TrashOptions{},
+			options: UntrashOptions{},
 			err:     errors.New("invalid message id"),
 		},
 		{
-			options: TrashOptions{
+			options: UntrashOptions{
 				MessageID: "message-id",
 			},
 			err: nil,
@@ -432,6 +432,76 @@ func TestClient_Untrash(t *testing.T) {
 	for i, test := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			resp, err := test.client.Untrash(test.options)
+			assert.Equal(t, test.err, err)
+			if err != nil {
+				return
+			}
+
+			assert.NotEmpty(t, resp)
+
+			var values map[string]interface{}
+			err = json.Unmarshal([]byte(resp), &values)
+			assert.Nil(t, err)
+		})
+	}
+}
+
+func TestSendOptions_Check(t *testing.T) {
+	tests := []struct {
+		options SendOptions
+		err     error
+	}{
+		{
+			options: SendOptions{},
+			err:     errors.New("invalid message id"),
+		},
+		{
+			options: SendOptions{
+				MessageID: "message-id",
+			},
+			err: nil,
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			err := test.options.check()
+			assert.Equal(t, test.err, err)
+		})
+	}
+}
+
+func TestClient_Send(t *testing.T) {
+	tests := []struct {
+		client  Client
+		options SendOptions
+		err     error
+	}{
+		{
+			client: Client{
+				Endpoint: "https://httpbin.org/anything",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+				Verbose: true,
+			},
+			options: SendOptions{
+				MessageID: "message-id",
+			},
+			err: nil,
+		},
+		{
+			client: Client{
+				Verbose: true,
+			},
+			options: SendOptions{},
+			err:     errors.New("invalid message id"),
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			resp, err := test.client.Send(test.options)
 			assert.Equal(t, test.err, err)
 			if err != nil {
 				return

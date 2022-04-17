@@ -256,3 +256,36 @@ func (c *Client) Untrash(options UntrashOptions) (string, error) {
 
 	return string(result), nil
 }
+
+type SendOptions struct {
+	MessageID string
+}
+
+func (o SendOptions) check() error {
+	if o.MessageID == "" {
+		return errors.New("invalid message id")
+	}
+
+	return nil
+}
+
+func (c *Client) Send(options SendOptions) (string, error) {
+	if err := options.check(); err != nil {
+		return "", err
+	}
+
+	if c.Verbose {
+		fmt.Printf("[DEBUG] Sending email\n")
+	}
+
+	ctx := context.Background()
+	err := c.loadCredentials(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	q := url.Values{}
+	result, err := c.request(ctx, http.MethodPost, "/emails/"+options.MessageID+"/send", q, nil)
+
+	return string(result), nil
+}
