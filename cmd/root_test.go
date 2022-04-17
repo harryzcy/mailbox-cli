@@ -19,3 +19,20 @@ func TestRoot(t *testing.T) {
 	assert.Contains(t, buf.String(), "Usage:")
 	assert.Contains(t, buf.String(), "Flags:")
 }
+
+func TestExe(t *testing.T) {
+	var exitCode int
+	osExit = func(code int) { exitCode = code }
+
+	rootCmd.SetArgs([]string{})
+	Execute()
+	assert.Equal(t, 0, exitCode)
+
+	rootCmd.SetArgs([]string{"--help"})
+	Execute()
+	assert.Equal(t, 0, exitCode)
+
+	rootCmd.SetArgs([]string{"invalid-command"})
+	Execute()
+	assert.Equal(t, 1, exitCode)
+}
