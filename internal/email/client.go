@@ -292,15 +292,16 @@ func (c *Client) Delete(options DeleteOptions) (string, error) {
 }
 
 type SaveOptions struct {
-	Subject string   `json:"subject"`
-	From    []string `json:"from"`
-	To      []string `json:"to"`
-	Cc      []string `json:"cc"`
-	Bcc     []string `json:"bcc"`
-	ReplyTo []string `json:"replyTo"`
-	Body    string   `json:"body"`
-	Text    string   `json:"text"`
-	HTML    string   `json:"html"`
+	MessageID string
+	Subject   string   `json:"subject"`
+	From      []string `json:"from"`
+	To        []string `json:"to"`
+	Cc        []string `json:"cc"`
+	Bcc       []string `json:"bcc"`
+	ReplyTo   []string `json:"replyTo"`
+	Body      string   `json:"body"`
+	Text      string   `json:"text"`
+	HTML      string   `json:"html"`
 
 	File string `json:"-"`
 }
@@ -361,7 +362,7 @@ func (c *Client) Save(options SaveOptions) (string, error) {
 	}
 
 	q := url.Values{}
-	result, err := c.request(ctx, http.MethodPost, "/emails", q, body)
+	result, err := c.request(ctx, http.MethodPut, "/emails/"+options.MessageID, q, body)
 
 	return string(result), err
 }
