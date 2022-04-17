@@ -181,7 +181,7 @@ func TestListOptions_Check(t *testing.T) {
 	}
 }
 
-func TestClientList(t *testing.T) {
+func TestClient_List(t *testing.T) {
 	tests := []struct {
 		client  Client
 		options ListOptions
@@ -226,6 +226,72 @@ func TestClientList(t *testing.T) {
 			assert.Nil(t, err)
 
 			assert.Equal(t, test.args, values["args"])
+		})
+	}
+}
+
+func TestGetOptions_Check(t *testing.T) {
+	tests := []struct {
+		options GetOptions
+		err     error
+	}{
+		{
+			options: GetOptions{},
+			err:     errors.New("invalid message id"),
+		},
+		{
+			options: GetOptions{
+				MessageID: "message-id",
+			},
+			err: nil,
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			err := test.options.check()
+			assert.Equal(t, test.err, err)
+		})
+	}
+}
+
+func TestClient_Get(t *testing.T) {
+	tests := []struct {
+		client  Client
+		options GetOptions
+		err     error
+	}{
+		{
+			client: Client{
+				Endpoint: "https://httpbin.org/anything",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+			},
+			options: GetOptions{
+				MessageID: "message-id",
+			},
+			err: nil,
+		},
+		{
+			options: GetOptions{},
+			err:     errors.New("invalid message id"),
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			resp, err := test.client.Get(test.options)
+			assert.Equal(t, test.err, err)
+			if err != nil {
+				return
+			}
+
+			assert.NotEmpty(t, resp)
+
+			var values map[string]interface{}
+			err = json.Unmarshal([]byte(resp), &values)
+			assert.Nil(t, err)
 		})
 	}
 }

@@ -103,3 +103,33 @@ func (c *Client) List(options ListOptions) (string, error) {
 
 	return string(result), nil
 }
+
+type GetOptions struct {
+	MessageID string
+}
+
+func (o GetOptions) check() error {
+	if o.MessageID == "" {
+		return errors.New("invalid message id")
+	}
+
+	return nil
+}
+
+func (c *Client) Get(options GetOptions) (string, error) {
+	if err := options.check(); err != nil {
+		return "", err
+	}
+
+	ctx := context.Background()
+	cfg, err := config.LoadDefaultConfig(ctx)
+	if err != nil {
+		return "", err
+	}
+	c.Credentials = cfg.Credentials
+
+	q := url.Values{}
+	result, err := c.request(ctx, http.MethodGet, "/emails/"+options.MessageID, q, nil)
+
+	return string(result), nil
+}
