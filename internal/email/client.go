@@ -219,7 +219,7 @@ func (c *Client) Trash(options TrashOptions) (string, error) {
 	}
 
 	q := url.Values{}
-	result, err := c.request(ctx, http.MethodGet, "/emails/"+options.MessageID+"/trash", q, nil)
+	result, err := c.request(ctx, http.MethodPost, "/emails/"+options.MessageID+"/trash", q, nil)
 
 	return string(result), nil
 }
@@ -252,7 +252,7 @@ func (c *Client) Untrash(options UntrashOptions) (string, error) {
 	}
 
 	q := url.Values{}
-	result, err := c.request(ctx, http.MethodGet, "/emails/"+options.MessageID+"/untrash", q, nil)
+	result, err := c.request(ctx, http.MethodPost, "/emails/"+options.MessageID+"/untrash", q, nil)
 
 	return string(result), nil
 }
