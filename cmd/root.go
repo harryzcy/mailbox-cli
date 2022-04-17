@@ -27,4 +27,5 @@ func Execute() {
 func init() {
 	rootCmd.PersistentFlags().String("api-id", "", "API ID")
 	rootCmd.PersistentFlags().String("region", "", "Region")
+	rootCmd.PersistentFlags().BoolP("verbose", "v", false, "Verbose mode")
 }

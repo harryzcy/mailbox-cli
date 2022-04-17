@@ -13,9 +13,11 @@ var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List emails",
 	Run: func(cmd *cobra.Command, args []string) {
+		verbose, _ := cmd.Flags().GetBool("verbose")
 		client := email.Client{
-			APIID:  cmd.Flag("api-id").Value.String(),
-			Region: cmd.Flag("region").Value.String(),
+			APIID:   cmd.Flag("api-id").Value.String(),
+			Region:  cmd.Flag("region").Value.String(),
+			Verbose: verbose,
 		}
 		result, err := client.List(email.ListOptions{
 			Type:       cmd.Flag("type").Value.String(),

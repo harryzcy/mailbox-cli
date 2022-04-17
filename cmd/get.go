@@ -19,9 +19,11 @@ var getCmd = &cobra.Command{
 		}
 		messageID := args[0]
 
+		verbose, _ := cmd.Flags().GetBool("verbose")
 		client := email.Client{
-			APIID:  cmd.Flag("api-id").Value.String(),
-			Region: cmd.Flag("region").Value.String(),
+			APIID:   cmd.Flag("api-id").Value.String(),
+			Region:  cmd.Flag("region").Value.String(),
+			Verbose: verbose,
 		}
 		result, err := client.Get(email.GetOptions{
 			MessageID: messageID,
