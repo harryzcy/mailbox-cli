@@ -382,6 +382,10 @@ type SaveOptions struct {
 }
 
 func (o SaveOptions) check() error {
+	if o.MessageID == "" {
+		return errors.New("invalid message id")
+	}
+
 	if o.Subject == "" {
 		return errors.New("invalid subject")
 	}

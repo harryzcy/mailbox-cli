@@ -656,32 +656,41 @@ func TestSaveOptions_Check(t *testing.T) {
 	}{
 		{
 			options: SaveOptions{},
-			err:     errors.New("invalid subject"),
+			err:     errors.New("invalid message id"),
 		},
 		{
 			options: SaveOptions{
-				Subject: "subject",
+				MessageID: "message-id",
+			},
+			err: errors.New("invalid subject"),
+		},
+		{
+			options: SaveOptions{
+				MessageID: "message-id",
+				Subject:   "subject",
 			},
 			err: errors.New("invalid from"),
 		},
 		{
 			options: SaveOptions{
-				Subject: "subject",
-				From:    []string{"from"},
+				MessageID: "message-id",
+				Subject:   "subject",
+				From:      []string{"from"},
 			},
 			err: errors.New("invalid to"),
 		},
 		{
 			options: SaveOptions{
-				Subject: "subject",
-				From:    []string{"from"},
-				To:      []string{"to"},
-				Cc:      []string{"cc"},
-				Bcc:     []string{"bcc"},
-				ReplyTo: []string{"reply-to"},
-				Body:    "body",
-				Text:    "text",
-				HTML:    "html",
+				MessageID: "message-id",
+				Subject:   "subject",
+				From:      []string{"from"},
+				To:        []string{"to"},
+				Cc:        []string{"cc"},
+				Bcc:       []string{"bcc"},
+				ReplyTo:   []string{"reply-to"},
+				Body:      "body",
+				Text:      "text",
+				HTML:      "html",
 			},
 			err: nil,
 		},
