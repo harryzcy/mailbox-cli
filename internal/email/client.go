@@ -78,9 +78,18 @@ func (c Client) request(ctx context.Context, method string, path string, query u
 	}
 	defer resp.Body.Close()
 
+	if c.Verbose {
+		fmt.Printf("[DEBUG] Response status: %d\n", resp.StatusCode)
+	}
+
 	data, err := ioReadall(resp.Body)
 	if err != nil {
 		return "", err
+	}
+
+	if c.Verbose {
+		fmt.Printf("[DEBUG] Content-Type: %s\n", resp.Header["Content-Type"][0])
+		fmt.Printf("[DEBUG] Response: %s\n", string(data))
 	}
 
 	if resp.Header["Content-Type"][0] == "application/json" {
