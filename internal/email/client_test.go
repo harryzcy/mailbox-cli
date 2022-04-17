@@ -750,7 +750,8 @@ func TestClient_Save(t *testing.T) {
 				Verbose: true,
 			},
 			options: SaveOptions{
-				File: "../../test/data/email.json",
+				MessageID: "message-id",
+				File:      "../../test/data/email.json",
 			},
 			err: nil,
 		},
@@ -759,14 +760,15 @@ func TestClient_Save(t *testing.T) {
 				Verbose: true,
 			},
 			options: SaveOptions{},
-			err:     errors.New("invalid subject"),
+			err:     errors.New("invalid message id"),
 		},
 		{
 			client: Client{
 				Verbose: true,
 			},
 			options: SaveOptions{
-				File: "invalid.json",
+				MessageID: "message-id",
+				File:      "invalid.json",
 			},
 			err: &os.PathError{Op: "open", Path: "invalid.json", Err: syscall.ENOENT},
 		},
