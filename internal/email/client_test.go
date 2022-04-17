@@ -375,3 +375,73 @@ func TestClient_Trash(t *testing.T) {
 		})
 	}
 }
+
+func TestUntrashOptions_Check(t *testing.T) {
+	tests := []struct {
+		options TrashOptions
+		err     error
+	}{
+		{
+			options: TrashOptions{},
+			err:     errors.New("invalid message id"),
+		},
+		{
+			options: TrashOptions{
+				MessageID: "message-id",
+			},
+			err: nil,
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			err := test.options.check()
+			assert.Equal(t, test.err, err)
+		})
+	}
+}
+
+func TestClient_Untrash(t *testing.T) {
+	tests := []struct {
+		client  Client
+		options UntrashOptions
+		err     error
+	}{
+		{
+			client: Client{
+				Endpoint: "https://httpbin.org/anything",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+				Verbose: true,
+			},
+			options: UntrashOptions{
+				MessageID: "message-id",
+			},
+			err: nil,
+		},
+		{
+			client: Client{
+				Verbose: true,
+			},
+			options: UntrashOptions{},
+			err:     errors.New("invalid message id"),
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			resp, err := test.client.Untrash(test.options)
+			assert.Equal(t, test.err, err)
+			if err != nil {
+				return
+			}
+
+			assert.NotEmpty(t, resp)
+
+			var values map[string]interface{}
+			err = json.Unmarshal([]byte(resp), &values)
+			assert.Nil(t, err)
+		})
+	}
+}
