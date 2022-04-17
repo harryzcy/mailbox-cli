@@ -58,6 +58,10 @@ func (c Client) request(ctx context.Context, method string, path string, query u
 		return "", err
 	}
 
+	if resp.Header["Content-Type"][0] == "application/json" {
+		return prettyResult(data)
+	}
+
 	return string(data), nil
 }
 
