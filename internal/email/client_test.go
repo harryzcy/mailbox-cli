@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -226,6 +227,7 @@ func TestClient_List(t *testing.T) {
 			assert.Nil(t, err)
 
 			assert.Equal(t, test.args, values["args"])
+			fmt.Println(values)
 		})
 	}
 }
@@ -289,6 +291,7 @@ func TestClient_Get(t *testing.T) {
 
 			assert.NotEmpty(t, resp)
 
+			fmt.Println(resp)
 			var values map[string]interface{}
 			err = json.Unmarshal([]byte(resp), &values)
 			assert.Nil(t, err)
