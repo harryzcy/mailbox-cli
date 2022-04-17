@@ -145,3 +145,38 @@ func TestClient_Request(t *testing.T) {
 		})
 	}
 }
+
+func TestListOptions_Check(t *testing.T) {
+	tests := []struct {
+		options ListOptions
+		err     error
+	}{
+		{
+			options: ListOptions{
+				Type: "invalid",
+			},
+			err: errors.New("invalid type"),
+		},
+		{
+			options: ListOptions{
+				Type:  EmailTypeInbox,
+				Order: "invalid",
+			},
+			err: errors.New("invalid order"),
+		},
+		{
+			options: ListOptions{
+				Type:  EmailTypeInbox,
+				Order: OrderDesc,
+			},
+			err: nil,
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			err := test.options.check()
+			assert.Equal(t, test.err, err)
+		})
+	}
+}
