@@ -183,3 +183,37 @@ func (c *Client) Get(options GetOptions) (string, error) {
 
 	return string(result), nil
 }
+
+type TrashOptions struct {
+	MessageID string
+}
+
+func (o TrashOptions) check() error {
+	if o.MessageID == "" {
+		return errors.New("invalid message id")
+	}
+
+	return nil
+}
+
+func (c *Client) Trash(options TrashOptions) (string, error) {
+	if err := options.check(); err != nil {
+		return "", err
+	}
+
+	if c.Verbose {
+		fmt.Printf("[DEBUG] Trashing email\n")
+	}
+
+	ctx := context.Background()
+	cfg, err := config.LoadDefaultConfig(ctx)
+	if err != nil {
+		return "", err
+	}
+	c.Credentials = cfg.Credentials
+
+	q := url.Values{}
+	result, err := c.request(ctx, http.MethodGet, "/emails/"+options.MessageID+"/trash", q, nil)
+
+	return string(result), nil
+}

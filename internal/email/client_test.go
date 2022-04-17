@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -233,7 +232,6 @@ func TestClient_List(t *testing.T) {
 			assert.Nil(t, err)
 
 			assert.Equal(t, test.args, values["args"])
-			fmt.Println(values)
 		})
 	}
 }
@@ -294,7 +292,76 @@ func TestClient_Get(t *testing.T) {
 	for i, test := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			resp, err := test.client.Get(test.options)
-			fmt.Println(resp, err)
+			assert.Equal(t, test.err, err)
+			if err != nil {
+				return
+			}
+
+			assert.NotEmpty(t, resp)
+
+			var values map[string]interface{}
+			err = json.Unmarshal([]byte(resp), &values)
+			assert.Nil(t, err)
+		})
+	}
+}
+
+func TestTrashOptions_Check(t *testing.T) {
+	tests := []struct {
+		options TrashOptions
+		err     error
+	}{
+		{
+			options: TrashOptions{},
+			err:     errors.New("invalid message id"),
+		},
+		{
+			options: TrashOptions{
+				MessageID: "message-id",
+			},
+			err: nil,
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			err := test.options.check()
+			assert.Equal(t, test.err, err)
+		})
+	}
+}
+
+func TestClient_Trash(t *testing.T) {
+	tests := []struct {
+		client  Client
+		options TrashOptions
+		err     error
+	}{
+		{
+			client: Client{
+				Endpoint: "https://httpbin.org/anything",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+				Verbose: true,
+			},
+			options: TrashOptions{
+				MessageID: "message-id",
+			},
+			err: nil,
+		},
+		{
+			client: Client{
+				Verbose: true,
+			},
+			options: TrashOptions{},
+			err:     errors.New("invalid message id"),
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			resp, err := test.client.Trash(test.options)
 			assert.Equal(t, test.err, err)
 			if err != nil {
 				return
