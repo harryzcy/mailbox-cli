@@ -82,9 +82,6 @@ func (o ListOptions) check() error {
 }
 
 func (c *Client) List(options ListOptions) (string, error) {
-	if options.Type == "" {
-		options.Type = EmailTypeInbox
-	}
 	if err := options.check(); err != nil {
 		return "", err
 	}

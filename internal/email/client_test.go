@@ -180,3 +180,52 @@ func TestListOptions_Check(t *testing.T) {
 		})
 	}
 }
+
+func TestClientList(t *testing.T) {
+	tests := []struct {
+		client  Client
+		options ListOptions
+		args    map[string]interface{}
+		err     error
+	}{
+		{
+			client: Client{
+				Endpoint: "https://httpbin.org/anything",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+			},
+			options: ListOptions{
+				Type:  EmailTypeInbox,
+				Order: OrderDesc,
+			},
+			args: map[string]interface{}{
+				"type":  "inbox",
+				"order": "desc",
+			},
+			err: nil,
+		},
+		{
+			options: ListOptions{},
+			err:     errors.New("invalid type"),
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			resp, err := test.client.List(test.options)
+			assert.Equal(t, test.err, err)
+			if err != nil {
+				return
+			}
+
+			assert.NotEmpty(t, resp)
+
+			var values map[string]interface{}
+			err = json.Unmarshal([]byte(resp), &values)
+			assert.Nil(t, err)
+
+			assert.Equal(t, test.args, values["args"])
+		})
+	}
+}
