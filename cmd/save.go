@@ -12,6 +12,13 @@ var saveCmd = &cobra.Command{
 	Use:   "save",
 	Short: "Save a draft email",
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) != 1 {
+			cmd.PrintErrln("Please specify a messageID")
+			osExit(1)
+			return
+		}
+		messageID := args[0]
+
 		verbose, _ := cmd.Flags().GetBool("verbose")
 		subject, _ := cmd.Flags().GetString("subject")
 		from, _ := cmd.Flags().GetStringArray("from")
@@ -30,16 +37,17 @@ var saveCmd = &cobra.Command{
 			Endpoint: cmd.Flag("endpoint").Value.String(),
 			Verbose:  verbose,
 
-			Subject: subject,
-			From:    from,
-			To:      to,
-			Cc:      cc,
-			Bcc:     bcc,
-			ReplyTo: replyTo,
-			Body:    body,
-			Text:    text,
-			HTML:    html,
-			File:    file,
+			MessageID: messageID,
+			Subject:   subject,
+			From:      from,
+			To:        to,
+			Cc:        cc,
+			Bcc:       bcc,
+			ReplyTo:   replyTo,
+			Body:      body,
+			Text:      text,
+			HTML:      html,
+			File:      file,
 		})
 		if err != nil {
 			cmd.PrintErrln(err)

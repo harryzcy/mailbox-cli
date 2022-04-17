@@ -13,7 +13,7 @@ func TestSave(t *testing.T) {
 	buf := new(bytes.Buffer)
 	rootCmd.SetOutput(buf)
 	rootCmd.SetErr(buf)
-	rootCmd.SetArgs([]string{"save"})
+	rootCmd.SetArgs([]string{"save", "messageID"})
 
 	commandSave = func(options command.SaveOptions) (string, error) {
 		return "result", nil
@@ -33,6 +33,16 @@ func TestSave(t *testing.T) {
 		return "result", errors.New("error")
 	}
 	rootCmd.SetArgs([]string{"save"})
+	c, err = rootCmd.ExecuteC()
+	assert.Nil(t, err)
+	assert.Equal(t, 1, exitCode)
+	assert.Equal(t, "Please specify a messageID\n", buf.String())
+
+	buf.Reset()
+	commandSave = func(options command.SaveOptions) (string, error) {
+		return "result", errors.New("error")
+	}
+	rootCmd.SetArgs([]string{"save", "messageID"})
 	c, err = rootCmd.ExecuteC()
 	assert.Nil(t, err)
 	assert.Equal(t, 1, exitCode)

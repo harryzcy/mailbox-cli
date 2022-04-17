@@ -148,15 +148,16 @@ type SaveOptions struct {
 	Verbose  bool
 
 	// request options
-	Subject string
-	From    []string
-	To      []string
-	Cc      []string
-	Bcc     []string
-	ReplyTo []string
-	Body    string
-	Text    string
-	HTML    string
+	MessageID string
+	Subject   string
+	From      []string
+	To        []string
+	Cc        []string
+	Bcc       []string
+	ReplyTo   []string
+	Body      string
+	Text      string
+	HTML      string
 
 	File string
 }
@@ -170,16 +171,17 @@ func Save(options SaveOptions) (string, error) {
 	}
 
 	result, err := client.Save(email.SaveOptions{
-		Subject: options.Subject,
-		From:    options.From,
-		To:      options.To,
-		Cc:      options.Cc,
-		Bcc:     options.Bcc,
-		ReplyTo: options.ReplyTo,
-		Body:    options.Body,
-		Text:    options.Text,
-		HTML:    options.HTML,
-		File:    options.File,
+		MessageID: options.MessageID,
+		Subject:   options.Subject,
+		From:      options.From,
+		To:        options.To,
+		Cc:        options.Cc,
+		Bcc:       options.Bcc,
+		ReplyTo:   options.ReplyTo,
+		Body:      options.Body,
+		Text:      options.Text,
+		HTML:      options.HTML,
+		File:      options.File,
 	})
 
 	return result, err
