@@ -33,6 +33,15 @@ func (c *Client) getEndpoint() string {
 	return c.Endpoint
 }
 
+func (c *Client) loadCredentials(ctx context.Context) error {
+	cfg, err := config.LoadDefaultConfig(ctx)
+	if err != nil {
+		return err
+	}
+	c.Credentials = cfg.Credentials
+	return nil
+}
+
 var ioReadall = ioutil.ReadAll
 
 func (c Client) request(ctx context.Context, method string, path string, query url.Values, payload []byte) (string, error) {
@@ -133,11 +142,10 @@ func (c *Client) List(options ListOptions) (string, error) {
 	}
 
 	ctx := context.Background()
-	cfg, err := config.LoadDefaultConfig(ctx)
+	err := c.loadCredentials(ctx)
 	if err != nil {
 		return "", err
 	}
-	c.Credentials = cfg.Credentials
 
 	q := url.Values{}
 	addQuery(q, "type", options.Type)
@@ -172,11 +180,10 @@ func (c *Client) Get(options GetOptions) (string, error) {
 	}
 
 	ctx := context.Background()
-	cfg, err := config.LoadDefaultConfig(ctx)
+	err := c.loadCredentials(ctx)
 	if err != nil {
 		return "", err
 	}
-	c.Credentials = cfg.Credentials
 
 	q := url.Values{}
 	result, err := c.request(ctx, http.MethodGet, "/emails/"+options.MessageID, q, nil)
@@ -206,11 +213,10 @@ func (c *Client) Trash(options TrashOptions) (string, error) {
 	}
 
 	ctx := context.Background()
-	cfg, err := config.LoadDefaultConfig(ctx)
+	err := c.loadCredentials(ctx)
 	if err != nil {
 		return "", err
 	}
-	c.Credentials = cfg.Credentials
 
 	q := url.Values{}
 	result, err := c.request(ctx, http.MethodGet, "/emails/"+options.MessageID+"/trash", q, nil)
@@ -240,11 +246,10 @@ func (c *Client) Untrash(options UntrashOptions) (string, error) {
 	}
 
 	ctx := context.Background()
-	cfg, err := config.LoadDefaultConfig(ctx)
+	err := c.loadCredentials(ctx)
 	if err != nil {
 		return "", err
 	}
-	c.Credentials = cfg.Credentials
 
 	q := url.Values{}
 	result, err := c.request(ctx, http.MethodGet, "/emails/"+options.MessageID+"/untrash", q, nil)
