@@ -25,13 +25,15 @@ func TestGetEndpoint(t *testing.T) {
 		{
 			client: Client{
 				Endpoint: "https://api_id.execute-api.us-west-2.amazonaws.com/",
+				Verbose:  true,
 			},
 			endpoint: "https://api_id.execute-api.us-west-2.amazonaws.com/",
 		},
 		{
 			client: Client{
-				APIID:  "api_id",
-				Region: "us-west-2",
+				APIID:   "api_id",
+				Region:  "us-west-2",
+				Verbose: true,
 			},
 			endpoint: "https://api_id.execute-api.us-west-2.amazonaws.com/",
 		},

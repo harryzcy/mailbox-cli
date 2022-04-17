@@ -65,9 +65,6 @@ func (c Client) request(ctx context.Context, method string, path string, query u
 		Verbose:     c.Verbose,
 	})
 	if err != nil {
-		if c.Verbose {
-			fmt.Printf("[DEBUG] Signing request failed: %s\n", err)
-		}
 		return "", err
 	}
 
