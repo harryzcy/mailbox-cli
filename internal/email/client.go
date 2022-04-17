@@ -3,6 +3,7 @@ package email
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -288,6 +289,81 @@ func (c *Client) Delete(options DeleteOptions) (string, error) {
 	result, err := c.request(ctx, http.MethodDelete, "/emails/"+options.MessageID, q, nil)
 
 	return string(result), nil
+}
+
+type SaveOptions struct {
+	Subject string   `json:"subject"`
+	From    []string `json:"from"`
+	To      []string `json:"to"`
+	Cc      []string `json:"cc"`
+	Bcc     []string `json:"bcc"`
+	ReplyTo []string `json:"replyTo"`
+	Body    string   `json:"body"`
+	Text    string   `json:"text"`
+	HTML    string   `json:"html"`
+
+	File string `json:"-"`
+}
+
+func (o SaveOptions) check() error {
+	if o.Subject == "" {
+		return errors.New("invalid subject")
+	}
+
+	if len(o.From) == 0 {
+		return errors.New("invalid from")
+	}
+
+	if len(o.To) == 0 {
+		return errors.New("invalid to")
+	}
+
+	return nil
+}
+
+func (o *SaveOptions) loadFile() error {
+	if o.File == "" {
+		return nil
+	}
+
+	data, err := ioutil.ReadFile(o.File)
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(data, o)
+
+	return err
+}
+
+func (c *Client) Save(options SaveOptions) (string, error) {
+	if err := options.loadFile(); err != nil {
+		return "", err
+	}
+
+	if err := options.check(); err != nil {
+		return "", err
+	}
+
+	if c.Verbose {
+		fmt.Printf("[DEBUG] Saving email\n")
+	}
+
+	ctx := context.Background()
+	err := c.loadCredentials(ctx)
+	if err != nil {
+		return "", err
+	}
+
+	body, err := json.Marshal(options)
+	if err != nil {
+		return "", err
+	}
+
+	q := url.Values{}
+	result, err := c.request(ctx, http.MethodPost, "/emails", q, body)
+
+	return string(result), err
 }
 
 type SendOptions struct {

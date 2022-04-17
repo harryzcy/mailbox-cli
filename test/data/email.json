@@ -1,0 +1,21 @@
+{
+  "subject": "I am a subject",
+  "from": [
+    "from@example.com"
+  ],
+  "to": [
+    "to@example.com"
+  ],
+  "cc": [
+    "cc@example.com"
+  ],
+  "bcc": [
+    "bcc@example.com"
+  ],
+  "replyTo": [
+    "reply@example.com"
+  ],
+  "body": "This is the body",
+  "text": "This is the body",
+  "html": "<p>This is the body</p>"
+}

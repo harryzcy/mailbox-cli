@@ -8,7 +8,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
+	"syscall"
 	"testing"
 	"time"
 
@@ -502,6 +504,137 @@ func TestClient_Delete(t *testing.T) {
 	for i, test := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			resp, err := test.client.Delete(test.options)
+			assert.Equal(t, test.err, err)
+			if err != nil {
+				return
+			}
+
+			assert.NotEmpty(t, resp)
+
+			var values map[string]interface{}
+			err = json.Unmarshal([]byte(resp), &values)
+			assert.Nil(t, err)
+		})
+	}
+}
+
+func TestSaveOptions_Check(t *testing.T) {
+	tests := []struct {
+		options SaveOptions
+		err     error
+	}{
+		{
+			options: SaveOptions{},
+			err:     errors.New("invalid subject"),
+		},
+		{
+			options: SaveOptions{
+				Subject: "subject",
+			},
+			err: errors.New("invalid from"),
+		},
+		{
+			options: SaveOptions{
+				Subject: "subject",
+				From:    []string{"from"},
+			},
+			err: errors.New("invalid to"),
+		},
+		{
+			options: SaveOptions{
+				Subject: "subject",
+				From:    []string{"from"},
+				To:      []string{"to"},
+				Cc:      []string{"cc"},
+				Bcc:     []string{"bcc"},
+				ReplyTo: []string{"reply-to"},
+				Body:    "body",
+				Text:    "text",
+				HTML:    "html",
+			},
+			err: nil,
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			err := test.options.check()
+			assert.Equal(t, test.err, err)
+		})
+	}
+}
+
+func TestSaveOptions_LoadFile(t *testing.T) {
+	tests := []struct {
+		options SaveOptions
+		err     error
+	}{
+		{
+			options: SaveOptions{},
+			err:     nil,
+		},
+		{
+			options: SaveOptions{
+				File: "../../test/data/email.json",
+			},
+			err: nil,
+		},
+		{
+			options: SaveOptions{
+				File: "invalid.json",
+			},
+			err: &os.PathError{Op: "open", Path: "invalid.json", Err: syscall.ENOENT},
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			err := test.options.loadFile()
+			assert.Equal(t, test.err, err)
+		})
+	}
+}
+
+func TestClient_Save(t *testing.T) {
+	tests := []struct {
+		client  Client
+		options SaveOptions
+		err     error
+	}{
+		{
+			client: Client{
+				Endpoint: "https://httpbin.org/anything",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+				Verbose: true,
+			},
+			options: SaveOptions{
+				File: "../../test/data/email.json",
+			},
+			err: nil,
+		},
+		{
+			client: Client{
+				Verbose: true,
+			},
+			options: SaveOptions{},
+			err:     errors.New("invalid subject"),
+		},
+		{
+			client: Client{
+				Verbose: true,
+			},
+			options: SaveOptions{
+				File: "invalid.json",
+			},
+			err: &os.PathError{Op: "open", Path: "invalid.json", Err: syscall.ENOENT},
+		},
+	}
+
+	for i, test := range tests {
+		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			resp, err := test.client.Save(test.options)
 			assert.Equal(t, test.err, err)
 			if err != nil {
 				return
