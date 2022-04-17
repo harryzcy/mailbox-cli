@@ -3,12 +3,17 @@ package email
 import (
 	"context"
 	"crypto/sha256"
+	"errors"
 	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	v4 "github.com/aws/aws-sdk-go-v2/aws/signer/v4"
+)
+
+var (
+	ErrMissingCredentials = errors.New("no credentials provided")
 )
 
 type SignSDKRequestOptions struct {
@@ -19,6 +24,9 @@ type SignSDKRequestOptions struct {
 
 func SignSDKRequest(ctx context.Context, req *http.Request, options *SignSDKRequestOptions) error {
 	payloadHash := hashPayload(options.Payload)
+	if options.Credentials == nil {
+		return ErrMissingCredentials
+	}
 	credentials, err := options.Credentials.Retrieve(ctx)
 	if err != nil {
 		return err

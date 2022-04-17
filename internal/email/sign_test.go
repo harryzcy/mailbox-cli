@@ -47,4 +47,6 @@ func TestSignSDKRequest_Error(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Equal(t, errors.New("error"), err)
 
+	err = SignSDKRequest(context.Background(), req, &SignSDKRequestOptions{})
+	assert.Equal(t, ErrMissingCredentials, err)
 }

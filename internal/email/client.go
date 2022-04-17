@@ -1,19 +1,23 @@
 package email
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 )
 
 type Client struct {
-	APIID    string
-	Region   string
-	Endpoint string
+	APIID       string
+	Region      string
+	Endpoint    string
+	Credentials aws.CredentialsProvider
 }
 
 func (c Client) getEndpoint() string {
@@ -21,6 +25,40 @@ func (c Client) getEndpoint() string {
 		return c.Endpoint
 	}
 	return fmt.Sprintf("https://%s.execute-api.%s.amazonaws.com/", c.APIID, c.Region)
+}
+
+var ioReadall = ioutil.ReadAll
+
+func (c Client) request(ctx context.Context, method string, path string, query url.Values, payload []byte) (string, error) {
+	body := bytes.NewReader(payload)
+	req, err := http.NewRequestWithContext(ctx, method, c.getEndpoint()+path, body)
+	if err != nil {
+		return "", err
+	}
+	req.URL.RawQuery = query.Encode()
+
+	err = SignSDKRequest(ctx, req, &SignSDKRequestOptions{
+		Credentials: c.Credentials,
+		Payload:     []byte(""),
+		Region:      c.Region,
+	})
+	if err != nil {
+		return "", err
+	}
+
+	httpClient := &http.Client{}
+	resp, err := httpClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+
+	data, err := ioReadall(resp.Body)
+	if err != nil {
+		return "", err
+	}
+
+	return string(data), nil
 }
 
 type ListOptions struct {
@@ -53,41 +91,18 @@ func (c *Client) List(options ListOptions) (string, error) {
 
 	ctx := context.Background()
 	cfg, err := config.LoadDefaultConfig(ctx)
-
-	url := c.getEndpoint() + "/emails"
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return "", err
 	}
+	c.Credentials = cfg.Credentials
 
-	q := req.URL.Query()
+	q := url.Values{}
 	addQuery(q, "type", options.Type)
 	addQuery(q, "year", options.Year)
 	addQuery(q, "month", options.Month)
 	addQuery(q, "order", options.Order)
 	addQuery(q, "next_cursor", options.NextCursor)
-	req.URL.RawQuery = q.Encode()
+	result, err := c.request(ctx, http.MethodGet, "/emails", q, nil)
 
-	err = SignSDKRequest(ctx, req, &SignSDKRequestOptions{
-		Credentials: cfg.Credentials,
-		Payload:     []byte(""),
-		Region:      c.Region,
-	})
-	if err != nil {
-		return "", err
-	}
-
-	httpClient := &http.Client{}
-	resp, err := httpClient.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-
-	return string(body), nil
+	return string(result), nil
 }
