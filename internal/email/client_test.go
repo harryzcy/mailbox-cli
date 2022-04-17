@@ -195,6 +195,7 @@ func TestClient_List(t *testing.T) {
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
+				Verbose: true,
 			},
 			options: ListOptions{
 				Type:  EmailTypeInbox,
@@ -207,6 +208,9 @@ func TestClient_List(t *testing.T) {
 			err: nil,
 		},
 		{
+			client: Client{
+				Verbose: true,
+			},
 			options: ListOptions{},
 			err:     errors.New("invalid type"),
 		},
@@ -269,6 +273,7 @@ func TestClient_Get(t *testing.T) {
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
+				Verbose: true,
 			},
 			options: GetOptions{
 				MessageID: "message-id",
@@ -276,6 +281,9 @@ func TestClient_Get(t *testing.T) {
 			err: nil,
 		},
 		{
+			client: Client{
+				Verbose: true,
+			},
 			options: GetOptions{},
 			err:     errors.New("invalid message id"),
 		},
@@ -284,6 +292,7 @@ func TestClient_Get(t *testing.T) {
 	for i, test := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			resp, err := test.client.Get(test.options)
+			fmt.Println(resp, err)
 			assert.Equal(t, test.err, err)
 			if err != nil {
 				return
@@ -291,7 +300,6 @@ func TestClient_Get(t *testing.T) {
 
 			assert.NotEmpty(t, resp)
 
-			fmt.Println(resp)
 			var values map[string]interface{}
 			err = json.Unmarshal([]byte(resp), &values)
 			assert.Nil(t, err)
