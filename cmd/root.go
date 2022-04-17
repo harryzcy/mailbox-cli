@@ -23,3 +23,8 @@ func Execute() {
 		os.Exit(1)
 	}
 }
+
+func init() {
+	rootCmd.PersistentFlags().String("api-id", "", "API ID")
+	rootCmd.PersistentFlags().String("region", "", "Region")
+}

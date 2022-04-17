@@ -34,8 +34,6 @@ var listCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(listCmd)
-	listCmd.Flags().String("api-id", "", "API ID")
-	listCmd.Flags().String("region", "", "Region")
 	listCmd.Flags().String("type", "", "Type")
 	listCmd.Flags().String("year", "", "Year")
 	listCmd.Flags().String("month", "", "Month")
