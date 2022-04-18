@@ -66,6 +66,26 @@ func TestDelete(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+func TestCreate(t *testing.T) {
+	_, err := Create(CreateOptions{
+		APIID:    "",
+		Region:   "",
+		Endpoint: "https://httpbin.org/anything",
+		Verbose:  false,
+		Subject:  "subject",
+		From:     []string{"from"},
+		To:       []string{"to"},
+		Cc:       []string{"cc"},
+		Bcc:      []string{"bcc"},
+		ReplyTo:  []string{"replyTo"},
+		Body:     "body",
+		Text:     "text",
+		HTML:     "html",
+	})
+
+	assert.Nil(t, err)
+}
+
 func TestSave(t *testing.T) {
 	_, err := Save(SaveOptions{
 		MessageID: "messageID",
