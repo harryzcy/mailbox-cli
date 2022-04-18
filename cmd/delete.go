@@ -9,14 +9,10 @@ var commandDelete = command.Delete
 
 // deleteCmd represents the delete command
 var deleteCmd = &cobra.Command{
-	Use:   "delete",
+	Use:   "delete messageID",
 	Short: "Delete an email",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 1 {
-			cmd.PrintErrln("Please specify a messageID")
-			osExit(1)
-			return
-		}
 		messageID := args[0]
 
 		verbose, _ := cmd.Flags().GetBool("verbose")

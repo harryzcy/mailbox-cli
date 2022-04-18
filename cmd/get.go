@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/harryzcy/mailbox-cli/internal/command"
 	"github.com/spf13/cobra"
 )
@@ -11,15 +9,10 @@ var commandGet = command.Get
 
 // getCmd represents the get command
 var getCmd = &cobra.Command{
-	Use:   "get",
+	Use:   "get messageID",
 	Short: "Get an email by messageID",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println(len(args))
-		if len(args) != 1 {
-			cmd.PrintErrln("Please specify a messageID")
-			osExit(1)
-			return
-		}
 		messageID := args[0]
 
 		verbose, _ := cmd.Flags().GetBool("verbose")

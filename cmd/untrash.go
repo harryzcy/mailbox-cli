@@ -9,14 +9,10 @@ var commandUntrash = command.Untrash
 
 // untrashCmd represents the untrash command
 var untrashCmd = &cobra.Command{
-	Use:   "untrash",
+	Use:   "untrash messageID",
 	Short: "Untrash an email",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 1 {
-			cmd.PrintErrln("Please specify a messageID")
-			osExit(1)
-			return
-		}
 		messageID := args[0]
 
 		verbose, _ := cmd.Flags().GetBool("verbose")

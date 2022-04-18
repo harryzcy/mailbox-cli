@@ -9,14 +9,10 @@ var commandSave = command.Save
 
 // saveCmd represents the save command
 var saveCmd = &cobra.Command{
-	Use:   "save",
+	Use:   "save messageID",
 	Short: "Save a draft email",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 1 {
-			cmd.PrintErrln("Please specify a messageID")
-			osExit(1)
-			return
-		}
 		messageID := args[0]
 
 		verbose, _ := cmd.Flags().GetBool("verbose")

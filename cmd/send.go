@@ -9,14 +9,10 @@ var commandSend = command.Send
 
 // sendCmd represents the send command
 var sendCmd = &cobra.Command{
-	Use:   "send",
+	Use:   "send messageID",
 	Short: "Send an email",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 1 {
-			cmd.PrintErrln("Please specify a messageID")
-			osExit(1)
-			return
-		}
 		messageID := args[0]
 
 		verbose, _ := cmd.Flags().GetBool("verbose")

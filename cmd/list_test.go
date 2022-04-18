@@ -13,7 +13,7 @@ func TestList(t *testing.T) {
 	buf := new(bytes.Buffer)
 	rootCmd.SetOutput(buf)
 	rootCmd.SetErr(buf)
-	rootCmd.SetArgs([]string{"list", "message-id"})
+	rootCmd.SetArgs([]string{"list"})
 
 	commandList = func(options command.ListOptions) (string, error) {
 		return "result", nil

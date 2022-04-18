@@ -11,6 +11,7 @@ var commandCreate = command.Create
 var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create an email",
+	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		verbose, _ := cmd.Flags().GetBool("verbose")
 		subject, _ := cmd.Flags().GetString("subject")

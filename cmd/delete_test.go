@@ -30,9 +30,7 @@ func TestDelete(t *testing.T) {
 	buf.Reset()
 	rootCmd.SetArgs([]string{"delete"})
 	c, err = rootCmd.ExecuteC()
-	assert.Nil(t, err)
-	assert.Equal(t, 1, exitCode)
-	assert.Contains(t, buf.String(), "Please specify a messageID")
+	assert.NotNil(t, err)
 
 	buf.Reset()
 	commandDelete = func(options command.DeleteOptions) (string, error) {

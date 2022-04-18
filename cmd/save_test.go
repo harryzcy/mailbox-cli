@@ -29,14 +29,9 @@ func TestSave(t *testing.T) {
 
 	// error
 	buf.Reset()
-	commandSave = func(options command.SaveOptions) (string, error) {
-		return "result", errors.New("error")
-	}
 	rootCmd.SetArgs([]string{"save"})
 	c, err = rootCmd.ExecuteC()
-	assert.Nil(t, err)
-	assert.Equal(t, 1, exitCode)
-	assert.Equal(t, "Please specify a messageID\n", buf.String())
+	assert.NotNil(t, err)
 
 	buf.Reset()
 	commandSave = func(options command.SaveOptions) (string, error) {

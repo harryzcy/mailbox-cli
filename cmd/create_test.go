@@ -29,10 +29,15 @@ func TestCreate(t *testing.T) {
 
 	// error
 	buf.Reset()
+	rootCmd.SetArgs([]string{"create", "messageID"})
+	c, err = rootCmd.ExecuteC()
+	assert.NotNil(t, err)
+
+	buf.Reset()
 	commandCreate = func(options command.CreateOptions) (string, error) {
 		return "result", errors.New("error")
 	}
-	rootCmd.SetArgs([]string{"create", "messageID"})
+	rootCmd.SetArgs([]string{"create"})
 	c, err = rootCmd.ExecuteC()
 	assert.Nil(t, err)
 	assert.Equal(t, 1, exitCode)

@@ -30,9 +30,7 @@ func TestTrash(t *testing.T) {
 	buf.Reset()
 	rootCmd.SetArgs([]string{"trash"})
 	c, err = rootCmd.ExecuteC()
-	assert.Nil(t, err)
-	assert.Equal(t, 1, exitCode)
-	assert.Contains(t, buf.String(), "Please specify a messageID")
+	assert.NotNil(t, err)
 
 	buf.Reset()
 	commandTrash = func(options command.TrashOptions) (string, error) {

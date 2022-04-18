@@ -9,14 +9,10 @@ var commandTrash = command.Trash
 
 // trashCmd represents the trash command
 var trashCmd = &cobra.Command{
-	Use:   "trash",
+	Use:   "trash messageID",
 	Short: "Trash an email",
+	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 1 {
-			cmd.PrintErrln("Please specify a messageID")
-			osExit(1)
-			return
-		}
 		messageID := args[0]
 
 		verbose, _ := cmd.Flags().GetBool("verbose")

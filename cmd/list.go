@@ -11,6 +11,7 @@ var commandList = command.List
 var listCmd = &cobra.Command{
 	Use:   "list",
 	Short: "List emails",
+	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
 		verbose, _ := cmd.Flags().GetBool("verbose")
 		result, err := commandList(command.ListOptions{
