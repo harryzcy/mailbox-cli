@@ -1,6 +1,6 @@
 # mailbox-cli
 
-The Cli interface for [Mailbox](https://github.com/harryzcy/mailbox)
+The CLI interface for [Mailbox](https://github.com/harryzcy/mailbox)
 
 ## Install
 
