@@ -13,9 +13,7 @@ var rootCmd = &cobra.Command{
 	Use:   "mailbox-cli",
 	Short: "Handle mailbox APIs from the command line.",
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := cmd.Help(); err != nil {
-			osExit(1)
-		}
+		_ = cmd.Help()
 	},
 }
 

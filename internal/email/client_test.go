@@ -79,6 +79,21 @@ func TestClient_Request(t *testing.T) {
 			err:       nil,
 		},
 		{
+			ctx: context.Background(),
+			client: Client{
+				Endpoint: "https://httpbin.org",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+			},
+			method:    http.MethodGet,
+			path:      "/text",
+			query:     url.Values{},
+			payload:   []byte(""),
+			ioReadall: ioutil.ReadAll,
+			err:       nil,
+		},
+		{
 			client: Client{
 				Endpoint: "https://httpbin.org",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
@@ -142,10 +157,12 @@ func TestClient_Request(t *testing.T) {
 				return
 			}
 
-			var value map[string]interface{}
-			err = json.Unmarshal([]byte(data), &value)
-			assert.Nil(t, err)
-			assert.Contains(t, value["headers"], "Authorization")
+			if test.path != "/text" {
+				var value map[string]interface{}
+				err = json.Unmarshal([]byte(data), &value)
+				assert.Nil(t, err)
+				assert.Contains(t, value["headers"], "Authorization")
+			}
 		})
 	}
 }
@@ -186,11 +203,16 @@ func TestListOptions_Check(t *testing.T) {
 }
 
 func TestClient_List(t *testing.T) {
+	defer func() {
+		ioReadall = ioutil.ReadAll
+	}()
+
 	tests := []struct {
-		client  Client
-		options ListOptions
-		args    map[string]interface{}
-		err     error
+		client    Client
+		options   ListOptions
+		ioReadall func(io.Reader) ([]byte, error)
+		args      map[string]interface{}
+		err       error
 	}{
 		{
 			client: Client{
@@ -217,10 +239,37 @@ func TestClient_List(t *testing.T) {
 			options: ListOptions{},
 			err:     errors.New("invalid type"),
 		},
+		{
+			client: Client{
+				Endpoint: "https://httpbin.org/anything",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+				Verbose: true,
+			},
+			options: ListOptions{
+				Type:  EmailTypeInbox,
+				Order: OrderDesc,
+			},
+			ioReadall: func(r io.Reader) ([]byte, error) {
+				return nil, errors.New("error")
+			},
+			args: map[string]interface{}{
+				"type":  "inbox",
+				"order": "desc",
+			},
+			err: errors.New("error"),
+		},
 	}
 
 	for i, test := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			if test.ioReadall != nil {
+				ioReadall = test.ioReadall
+			} else {
+				ioReadall = ioutil.ReadAll
+			}
+
 			resp, err := test.client.List(test.options)
 			assert.Equal(t, test.err, err)
 			if err != nil {
@@ -264,10 +313,15 @@ func TestGetOptions_Check(t *testing.T) {
 }
 
 func TestClient_Get(t *testing.T) {
+	defer func() {
+		ioReadall = ioutil.ReadAll
+	}()
+
 	tests := []struct {
-		client  Client
-		options GetOptions
-		err     error
+		client    Client
+		options   GetOptions
+		ioReadall func(io.Reader) ([]byte, error)
+		err       error
 	}{
 		{
 			client: Client{
@@ -289,10 +343,32 @@ func TestClient_Get(t *testing.T) {
 			options: GetOptions{},
 			err:     errors.New("invalid message id"),
 		},
+		{
+			client: Client{
+				Endpoint: "https://httpbin.org/anything",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+				Verbose: true,
+			},
+			options: GetOptions{
+				MessageID: "message-id",
+			},
+			ioReadall: func(r io.Reader) ([]byte, error) {
+				return nil, errors.New("error")
+			},
+			err: errors.New("error"),
+		},
 	}
 
 	for i, test := range tests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
+			if test.ioReadall != nil {
+				ioReadall = test.ioReadall
+			} else {
+				ioReadall = ioutil.ReadAll
+			}
+
 			resp, err := test.client.Get(test.options)
 			assert.Equal(t, test.err, err)
 			if err != nil {
