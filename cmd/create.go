@@ -20,7 +20,6 @@ var createCmd = &cobra.Command{
 		cc, _ := cmd.Flags().GetStringArray("cc")
 		bcc, _ := cmd.Flags().GetStringArray("bcc")
 		replyTo, _ := cmd.Flags().GetStringArray("reply-to")
-		body, _ := cmd.Flags().GetString("body")
 		text, _ := cmd.Flags().GetString("text")
 		html, _ := cmd.Flags().GetString("html")
 		file, _ := cmd.Flags().GetString("file")
@@ -37,7 +36,6 @@ var createCmd = &cobra.Command{
 			Cc:      cc,
 			Bcc:     bcc,
 			ReplyTo: replyTo,
-			Body:    body,
 			Text:    text,
 			HTML:    html,
 			File:    file,
@@ -60,7 +58,6 @@ func init() {
 	createCmd.Flags().StringArray("cc", []string{}, "Cc")
 	createCmd.Flags().StringArray("bcc", []string{}, "Bcc")
 	createCmd.Flags().StringArray("reply-to", []string{}, "Reply-To")
-	createCmd.Flags().String("body", "", "Body")
 	createCmd.Flags().String("text", "", "Text")
 	createCmd.Flags().String("html", "", "HTML")
 	createCmd.Flags().String("file", "", "File")

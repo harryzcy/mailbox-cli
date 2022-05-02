@@ -78,7 +78,6 @@ func TestCreate(t *testing.T) {
 		Cc:       []string{"cc"},
 		Bcc:      []string{"bcc"},
 		ReplyTo:  []string{"replyTo"},
-		Body:     "body",
 		Text:     "text",
 		HTML:     "html",
 	})

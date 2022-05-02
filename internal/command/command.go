@@ -154,7 +154,6 @@ type CreateOptions struct {
 	Cc      []string
 	Bcc     []string
 	ReplyTo []string
-	Body    string
 	Text    string
 	HTML    string
 
@@ -176,7 +175,6 @@ func Create(options CreateOptions) (string, error) {
 		Cc:      options.Cc,
 		Bcc:     options.Bcc,
 		ReplyTo: options.ReplyTo,
-		Body:    options.Body,
 		Text:    options.Text,
 		HTML:    options.HTML,
 		File:    options.File,

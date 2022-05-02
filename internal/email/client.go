@@ -57,6 +57,9 @@ func (c Client) request(ctx context.Context, method string, path string, query u
 		return "", err
 	}
 	req.URL.RawQuery = query.Encode()
+	if method == http.MethodPost || method == http.MethodPut {
+		req.Header.Add("Content-Type", "application/json")
+	}
 
 	if c.Verbose {
 		fmt.Printf("[DEBUG] Request URL: %s\n", req.URL.String())
@@ -70,7 +73,7 @@ func (c Client) request(ctx context.Context, method string, path string, query u
 
 	err = SignSDKRequest(ctx, req, &SignSDKRequestOptions{
 		Credentials: c.Credentials,
-		Payload:     []byte(""),
+		Payload:     payload,
 		Region:      c.Region,
 		Verbose:     c.Verbose,
 	})
@@ -328,7 +331,6 @@ type CreateOptions struct {
 	Cc      []string `json:"cc"`
 	Bcc     []string `json:"bcc"`
 	ReplyTo []string `json:"replyTo"`
-	Body    string   `json:"body"`
 	Text    string   `json:"text"`
 	HTML    string   `json:"html"`
 

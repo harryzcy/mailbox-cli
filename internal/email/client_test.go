@@ -548,7 +548,6 @@ func TestCreateOptions_Check(t *testing.T) {
 				Cc:      []string{"cc"},
 				Bcc:     []string{"bcc"},
 				ReplyTo: []string{"reply-to"},
-				Body:    "body",
 				Text:    "text",
 				HTML:    "html",
 			},
