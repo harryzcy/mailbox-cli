@@ -155,6 +155,12 @@ func (c *Client) List(options ListOptions) (string, error) {
 	addQuery(q, "order", options.Order)
 	addQuery(q, "next_cursor", options.NextCursor)
 	result, err := c.request(ctx, http.MethodGet, "/emails", q, nil)
+	if err != nil {
+		if c.Verbose {
+			fmt.Printf("[DEBUG] Error: %s\n", err)
+		}
+		return "", err
+	}
 
 	return string(result), nil
 }
@@ -188,6 +194,12 @@ func (c *Client) Get(options GetOptions) (string, error) {
 
 	q := url.Values{}
 	result, err := c.request(ctx, http.MethodGet, "/emails/"+options.MessageID, q, nil)
+	if err != nil {
+		if c.Verbose {
+			fmt.Printf("[DEBUG] Error: %s\n", err)
+		}
+		return "", err
+	}
 
 	return string(result), nil
 }
@@ -221,6 +233,12 @@ func (c *Client) Trash(options TrashOptions) (string, error) {
 
 	q := url.Values{}
 	result, err := c.request(ctx, http.MethodPost, "/emails/"+options.MessageID+"/trash", q, nil)
+	if err != nil {
+		if c.Verbose {
+			fmt.Printf("[DEBUG] Error: %s\n", err)
+		}
+		return "", err
+	}
 
 	return string(result), nil
 }
@@ -254,6 +272,12 @@ func (c *Client) Untrash(options UntrashOptions) (string, error) {
 
 	q := url.Values{}
 	result, err := c.request(ctx, http.MethodPost, "/emails/"+options.MessageID+"/untrash", q, nil)
+	if err != nil {
+		if c.Verbose {
+			fmt.Printf("[DEBUG] Error: %s\n", err)
+		}
+		return "", err
+	}
 
 	return string(result), nil
 }
@@ -287,6 +311,12 @@ func (c *Client) Delete(options DeleteOptions) (string, error) {
 
 	q := url.Values{}
 	result, err := c.request(ctx, http.MethodDelete, "/emails/"+options.MessageID, q, nil)
+	if err != nil {
+		if c.Verbose {
+			fmt.Printf("[DEBUG] Error: %s\n", err)
+		}
+		return "", err
+	}
 
 	return string(result), nil
 }
@@ -362,6 +392,12 @@ func (c *Client) Create(options CreateOptions) (string, error) {
 
 	q := url.Values{}
 	result, err := c.request(ctx, http.MethodPost, "/emails", q, body)
+	if err != nil {
+		if c.Verbose {
+			fmt.Printf("[DEBUG] Error: %s\n", err)
+		}
+		return "", err
+	}
 
 	return string(result), err
 }
@@ -475,6 +511,12 @@ func (c *Client) Send(options SendOptions) (string, error) {
 
 	q := url.Values{}
 	result, err := c.request(ctx, http.MethodPost, "/emails/"+options.MessageID+"/send", q, nil)
+	if err != nil {
+		if c.Verbose {
+			fmt.Printf("[DEBUG] Error: %s\n", err)
+		}
+		return "", err
+	}
 
 	return string(result), nil
 }
