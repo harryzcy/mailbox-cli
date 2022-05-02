@@ -25,6 +25,9 @@ func prettyResult(result []byte) (string, error) {
 	encoder.SetEscapeHTML(false)
 	encoder.SetIndent("", "  ")
 	err = encoder.Encode(data)
+	if err != nil {
+		return "", err
+	}
 
 	return buffer.String(), nil
 }
