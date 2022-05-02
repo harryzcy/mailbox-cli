@@ -29,6 +29,9 @@ func Execute() {
 }
 
 func init() {
+	rootCmd.SetOut(os.Stdout)
+	rootCmd.SetErr(os.Stderr)
+
 	rootCmd.PersistentFlags().String("api-id", "", "API ID")
 	rootCmd.PersistentFlags().String("region", "", "Region")
 	rootCmd.PersistentFlags().String("endpoint", "", "Endpoint")
