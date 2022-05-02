@@ -1,6 +1,7 @@
 package email
 
 import (
+	"bytes"
 	"encoding/json"
 	"net/url"
 )
@@ -18,9 +19,12 @@ func prettyResult(result []byte) (string, error) {
 		return "", err
 	}
 
-	val, err := json.MarshalIndent(data, "", "    ")
-	if err != nil {
-		return "", err
-	}
-	return string(val), nil
+	// cannot use json.MarshalIndent because it escapes unicode characters
+	buffer := &bytes.Buffer{}
+	encoder := json.NewEncoder(buffer)
+	encoder.SetEscapeHTML(false)
+	encoder.SetIndent("", "  ")
+	err = encoder.Encode(data)
+
+	return buffer.String(), nil
 }
