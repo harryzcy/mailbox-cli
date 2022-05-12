@@ -29,7 +29,7 @@ func TestDelete(t *testing.T) {
 	// error
 	buf.Reset()
 	rootCmd.SetArgs([]string{"delete"})
-	c, err = rootCmd.ExecuteC()
+	_, err = rootCmd.ExecuteC()
 	assert.NotNil(t, err)
 
 	buf.Reset()
