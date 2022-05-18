@@ -29,7 +29,7 @@ func TestGet(t *testing.T) {
 	// error
 	buf.Reset()
 	rootCmd.SetArgs([]string{"get"})
-	c, err = rootCmd.ExecuteC()
+	_, err = rootCmd.ExecuteC()
 	assert.NotNil(t, err)
 
 	buf.Reset()
@@ -37,7 +37,7 @@ func TestGet(t *testing.T) {
 		return "result", errors.New("error")
 	}
 	rootCmd.SetArgs([]string{"get", "message-id"})
-	c, err = rootCmd.ExecuteC()
+	_, err = rootCmd.ExecuteC()
 	assert.Nil(t, err)
 	assert.Equal(t, 1, exitCode)
 	assert.Equal(t, "error\n", buf.String())
