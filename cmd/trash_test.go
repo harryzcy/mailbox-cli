@@ -29,7 +29,7 @@ func TestTrash(t *testing.T) {
 	// error
 	buf.Reset()
 	rootCmd.SetArgs([]string{"trash"})
-	c, err = rootCmd.ExecuteC()
+	_, err = rootCmd.ExecuteC()
 	assert.NotNil(t, err)
 
 	buf.Reset()
@@ -37,7 +37,7 @@ func TestTrash(t *testing.T) {
 		return "result", errors.New("error")
 	}
 	rootCmd.SetArgs([]string{"trash", "message-id"})
-	c, err = rootCmd.ExecuteC()
+	_, err = rootCmd.ExecuteC()
 	assert.Nil(t, err)
 	assert.Equal(t, 1, exitCode)
 	assert.Equal(t, "error\n", buf.String())
