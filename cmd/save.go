@@ -26,6 +26,7 @@ var saveCmd = &cobra.Command{
 		text, _ := cmd.Flags().GetString("text")
 		html, _ := cmd.Flags().GetString("html")
 		file, _ := cmd.Flags().GetString("file")
+		generateText, _ := cmd.Flags().GetString("generate-text")
 
 		result, err := commandSave(command.SaveOptions{
 			APIID:    cmd.Flag("api-id").Value.String(),
@@ -33,17 +34,19 @@ var saveCmd = &cobra.Command{
 			Endpoint: cmd.Flag("endpoint").Value.String(),
 			Verbose:  verbose,
 
-			MessageID: messageID,
-			Subject:   subject,
-			From:      from,
-			To:        to,
-			Cc:        cc,
-			Bcc:       bcc,
-			ReplyTo:   replyTo,
-			Body:      body,
-			Text:      text,
-			HTML:      html,
-			File:      file,
+			MessageID:    messageID,
+			Subject:      subject,
+			From:         from,
+			To:           to,
+			Cc:           cc,
+			Bcc:          bcc,
+			ReplyTo:      replyTo,
+			Body:         body,
+			Text:         text,
+			HTML:         html,
+			GenerateText: generateText,
+
+			File: file,
 		})
 		if err != nil {
 			cmd.PrintErrln(err)
@@ -66,5 +69,6 @@ func init() {
 	saveCmd.Flags().String("body", "", "Body")
 	saveCmd.Flags().String("text", "", "Text")
 	saveCmd.Flags().String("html", "", "HTML")
+	saveCmd.Flags().String("generate-text", "", "Generate text from HTML (optional)")
 	saveCmd.Flags().String("file", "", "File")
 }

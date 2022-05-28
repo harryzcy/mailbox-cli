@@ -23,6 +23,7 @@ var createCmd = &cobra.Command{
 		text, _ := cmd.Flags().GetString("text")
 		html, _ := cmd.Flags().GetString("html")
 		file, _ := cmd.Flags().GetString("file")
+		generateText, _ := cmd.Flags().GetString("generate-text")
 
 		result, err := commandCreate(command.CreateOptions{
 			APIID:    cmd.Flag("api-id").Value.String(),
@@ -30,15 +31,17 @@ var createCmd = &cobra.Command{
 			Endpoint: cmd.Flag("endpoint").Value.String(),
 			Verbose:  verbose,
 
-			Subject: subject,
-			From:    from,
-			To:      to,
-			Cc:      cc,
-			Bcc:     bcc,
-			ReplyTo: replyTo,
-			Text:    text,
-			HTML:    html,
-			File:    file,
+			Subject:      subject,
+			From:         from,
+			To:           to,
+			Cc:           cc,
+			Bcc:          bcc,
+			ReplyTo:      replyTo,
+			Text:         text,
+			HTML:         html,
+			GenerateText: generateText,
+
+			File: file,
 		})
 		if err != nil {
 			cmd.PrintErrln(err)
@@ -60,5 +63,6 @@ func init() {
 	createCmd.Flags().StringArray("reply-to", []string{}, "Reply-To")
 	createCmd.Flags().String("text", "", "Text")
 	createCmd.Flags().String("html", "", "HTML")
+	createCmd.Flags().String("generate-text", "", "Generate text from HTML (optional)")
 	createCmd.Flags().String("file", "", "File")
 }

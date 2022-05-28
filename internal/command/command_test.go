@@ -68,18 +68,19 @@ func TestDelete(t *testing.T) {
 
 func TestCreate(t *testing.T) {
 	_, err := Create(CreateOptions{
-		APIID:    "",
-		Region:   "",
-		Endpoint: "https://httpbin.org/anything",
-		Verbose:  false,
-		Subject:  "subject",
-		From:     []string{"from"},
-		To:       []string{"to"},
-		Cc:       []string{"cc"},
-		Bcc:      []string{"bcc"},
-		ReplyTo:  []string{"replyTo"},
-		Text:     "text",
-		HTML:     "html",
+		APIID:        "",
+		Region:       "",
+		Endpoint:     "https://httpbin.org/anything",
+		Verbose:      false,
+		Subject:      "subject",
+		From:         []string{"from"},
+		To:           []string{"to"},
+		Cc:           []string{"cc"},
+		Bcc:          []string{"bcc"},
+		ReplyTo:      []string{"replyTo"},
+		Text:         "text",
+		HTML:         "html",
+		GenerateText: "auto",
 	})
 
 	assert.Nil(t, err)
@@ -87,20 +88,21 @@ func TestCreate(t *testing.T) {
 
 func TestSave(t *testing.T) {
 	_, err := Save(SaveOptions{
-		MessageID: "messageID",
-		APIID:     "",
-		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
-		Verbose:   false,
-		Subject:   "subject",
-		From:      []string{"from"},
-		To:        []string{"to"},
-		Cc:        []string{"cc"},
-		Bcc:       []string{"bcc"},
-		ReplyTo:   []string{"replyTo"},
-		Body:      "body",
-		Text:      "text",
-		HTML:      "html",
+		MessageID:    "messageID",
+		APIID:        "",
+		Region:       "",
+		Endpoint:     "https://httpbin.org/anything",
+		Verbose:      false,
+		Subject:      "subject",
+		From:         []string{"from"},
+		To:           []string{"to"},
+		Cc:           []string{"cc"},
+		Bcc:          []string{"bcc"},
+		ReplyTo:      []string{"replyTo"},
+		Body:         "body",
+		Text:         "text",
+		HTML:         "html",
+		GenerateText: "auto",
 	})
 
 	assert.Nil(t, err)

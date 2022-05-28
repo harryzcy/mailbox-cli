@@ -325,14 +325,15 @@ func (c *Client) Delete(options DeleteOptions) (string, error) {
 }
 
 type CreateOptions struct {
-	Subject string   `json:"subject"`
-	From    []string `json:"from"`
-	To      []string `json:"to"`
-	Cc      []string `json:"cc"`
-	Bcc     []string `json:"bcc"`
-	ReplyTo []string `json:"replyTo"`
-	Text    string   `json:"text"`
-	HTML    string   `json:"html"`
+	Subject      string   `json:"subject"`
+	From         []string `json:"from"`
+	To           []string `json:"to"`
+	Cc           []string `json:"cc"`
+	Bcc          []string `json:"bcc"`
+	ReplyTo      []string `json:"replyTo"`
+	Text         string   `json:"text"`
+	HTML         string   `json:"html"`
+	GenerateText string   `json:"generateText"`
 
 	File string `json:"-"`
 }
@@ -348,6 +349,10 @@ func (o CreateOptions) check() error {
 
 	if len(o.To) == 0 {
 		return errors.New("invalid to")
+	}
+
+	if o.GenerateText != "on" && o.GenerateText != "off" && o.GenerateText != "auto" {
+		return errors.New("invalid generate-text")
 	}
 
 	return nil
@@ -373,6 +378,9 @@ func (c *Client) Create(options CreateOptions) (string, error) {
 		return "", err
 	}
 
+	if options.GenerateText == "" {
+		options.GenerateText = "auto"
+	}
 	if err := options.check(); err != nil {
 		return "", err
 	}
@@ -405,16 +413,17 @@ func (c *Client) Create(options CreateOptions) (string, error) {
 }
 
 type SaveOptions struct {
-	MessageID string
-	Subject   string   `json:"subject"`
-	From      []string `json:"from"`
-	To        []string `json:"to"`
-	Cc        []string `json:"cc"`
-	Bcc       []string `json:"bcc"`
-	ReplyTo   []string `json:"replyTo"`
-	Body      string   `json:"body"`
-	Text      string   `json:"text"`
-	HTML      string   `json:"html"`
+	MessageID    string   `json:"-"`
+	Subject      string   `json:"subject"`
+	From         []string `json:"from"`
+	To           []string `json:"to"`
+	Cc           []string `json:"cc"`
+	Bcc          []string `json:"bcc"`
+	ReplyTo      []string `json:"replyTo"`
+	Body         string   `json:"body"`
+	Text         string   `json:"text"`
+	HTML         string   `json:"html"`
+	GenerateText string   `json:"generateText"`
 
 	File string `json:"-"`
 }
@@ -434,6 +443,10 @@ func (o SaveOptions) check() error {
 
 	if len(o.To) == 0 {
 		return errors.New("invalid to")
+	}
+
+	if o.GenerateText != "on" && o.GenerateText != "off" && o.GenerateText != "auto" {
+		return errors.New("invalid generate-text")
 	}
 
 	return nil
@@ -459,6 +472,9 @@ func (c *Client) Save(options SaveOptions) (string, error) {
 		return "", err
 	}
 
+	if options.GenerateText == "" {
+		options.GenerateText = "auto"
+	}
 	if err := options.check(); err != nil {
 		return "", err
 	}

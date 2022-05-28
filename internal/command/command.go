@@ -148,14 +148,15 @@ type CreateOptions struct {
 	Verbose  bool
 
 	// request options
-	Subject string
-	From    []string
-	To      []string
-	Cc      []string
-	Bcc     []string
-	ReplyTo []string
-	Text    string
-	HTML    string
+	Subject      string
+	From         []string
+	To           []string
+	Cc           []string
+	Bcc          []string
+	ReplyTo      []string
+	Text         string
+	HTML         string
+	GenerateText string
 
 	File string
 }
@@ -169,15 +170,16 @@ func Create(options CreateOptions) (string, error) {
 	}
 
 	result, err := client.Create(email.CreateOptions{
-		Subject: options.Subject,
-		From:    options.From,
-		To:      options.To,
-		Cc:      options.Cc,
-		Bcc:     options.Bcc,
-		ReplyTo: options.ReplyTo,
-		Text:    options.Text,
-		HTML:    options.HTML,
-		File:    options.File,
+		Subject:      options.Subject,
+		From:         options.From,
+		To:           options.To,
+		Cc:           options.Cc,
+		Bcc:          options.Bcc,
+		ReplyTo:      options.ReplyTo,
+		Text:         options.Text,
+		HTML:         options.HTML,
+		GenerateText: options.GenerateText,
+		File:         options.File,
 	})
 
 	return result, err
@@ -191,16 +193,17 @@ type SaveOptions struct {
 	Verbose  bool
 
 	// request options
-	MessageID string
-	Subject   string
-	From      []string
-	To        []string
-	Cc        []string
-	Bcc       []string
-	ReplyTo   []string
-	Body      string
-	Text      string
-	HTML      string
+	MessageID    string
+	Subject      string
+	From         []string
+	To           []string
+	Cc           []string
+	Bcc          []string
+	ReplyTo      []string
+	Body         string
+	Text         string
+	HTML         string
+	GenerateText string
 
 	File string
 }
@@ -214,17 +217,18 @@ func Save(options SaveOptions) (string, error) {
 	}
 
 	result, err := client.Save(email.SaveOptions{
-		MessageID: options.MessageID,
-		Subject:   options.Subject,
-		From:      options.From,
-		To:        options.To,
-		Cc:        options.Cc,
-		Bcc:       options.Bcc,
-		ReplyTo:   options.ReplyTo,
-		Body:      options.Body,
-		Text:      options.Text,
-		HTML:      options.HTML,
-		File:      options.File,
+		MessageID:    options.MessageID,
+		Subject:      options.Subject,
+		From:         options.From,
+		To:           options.To,
+		Cc:           options.Cc,
+		Bcc:          options.Bcc,
+		ReplyTo:      options.ReplyTo,
+		Body:         options.Body,
+		Text:         options.Text,
+		HTML:         options.HTML,
+		GenerateText: options.GenerateText,
+		File:         options.File,
 	})
 
 	return result, err
