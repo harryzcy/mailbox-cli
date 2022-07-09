@@ -157,6 +157,7 @@ type CreateOptions struct {
 	Text         string
 	HTML         string
 	GenerateText string
+	Send         bool
 
 	File string
 }
@@ -179,6 +180,7 @@ func Create(options CreateOptions) (string, error) {
 		Text:         options.Text,
 		HTML:         options.HTML,
 		GenerateText: options.GenerateText,
+		Send:         options.Send,
 		File:         options.File,
 	})
 
@@ -204,6 +206,7 @@ type SaveOptions struct {
 	Text         string
 	HTML         string
 	GenerateText string
+	Send         bool
 
 	File string
 }
@@ -228,6 +231,7 @@ func Save(options SaveOptions) (string, error) {
 		Text:         options.Text,
 		HTML:         options.HTML,
 		GenerateText: options.GenerateText,
+		Send:         options.Send,
 		File:         options.File,
 	})
 

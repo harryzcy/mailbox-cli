@@ -334,6 +334,7 @@ type CreateOptions struct {
 	Text         string   `json:"text"`
 	HTML         string   `json:"html"`
 	GenerateText string   `json:"generateText"`
+	Send         bool     `json:"send"`
 
 	File string `json:"-"`
 }
@@ -424,6 +425,7 @@ type SaveOptions struct {
 	Text         string   `json:"text"`
 	HTML         string   `json:"html"`
 	GenerateText string   `json:"generateText"`
+	Send         bool     `json:"send"`
 
 	File string `json:"-"`
 }

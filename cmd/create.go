@@ -24,6 +24,7 @@ var createCmd = &cobra.Command{
 		html, _ := cmd.Flags().GetString("html")
 		file, _ := cmd.Flags().GetString("file")
 		generateText, _ := cmd.Flags().GetString("generate-text")
+		send, _ := cmd.Flags().GetBool("send")
 
 		result, err := commandCreate(command.CreateOptions{
 			APIID:    cmd.Flag("api-id").Value.String(),
@@ -40,6 +41,7 @@ var createCmd = &cobra.Command{
 			Text:         text,
 			HTML:         html,
 			GenerateText: generateText,
+			Send:         send,
 
 			File: file,
 		})
@@ -65,4 +67,5 @@ func init() {
 	createCmd.Flags().String("html", "", "HTML")
 	createCmd.Flags().String("generate-text", "", "Generate text from HTML (optional)")
 	createCmd.Flags().String("file", "", "File")
+	createCmd.Flags().Bool("send", false, "Send email immediately without using draft (optional)")
 }
