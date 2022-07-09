@@ -73,5 +73,5 @@ func init() {
 	saveCmd.Flags().String("html", "", "HTML")
 	saveCmd.Flags().String("generate-text", "", "Generate text from HTML (optional)")
 	saveCmd.Flags().String("file", "", "File")
-	createCmd.Flags().Bool("send", false, "Send email immediately without using draft (optional)")
+	saveCmd.Flags().Bool("send", false, "Send email immediately without using draft (optional)")
 }
