@@ -26,7 +26,7 @@ func (c *Client) getEndpoint() string {
 	if c.Endpoint != "" {
 		return c.Endpoint
 	}
-	c.Endpoint = fmt.Sprintf("https://%s.execute-api.%s.amazonaws.com/", c.APIID, c.Region)
+	c.Endpoint = fmt.Sprintf("https://%s.execute-api.%s.amazonaws.com", c.APIID, c.Region)
 
 	if c.Verbose {
 		fmt.Printf("[DEBUG] Generated endpoint: %s\n", c.Endpoint)
