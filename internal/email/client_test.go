@@ -25,10 +25,10 @@ func TestGetEndpoint(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://api_id.execute-api.us-west-2.amazonaws.com/",
+				Endpoint: "https://api_id.execute-api.us-west-2.amazonaws.com",
 				Verbose:  true,
 			},
-			endpoint: "https://api_id.execute-api.us-west-2.amazonaws.com/",
+			endpoint: "https://api_id.execute-api.us-west-2.amazonaws.com",
 		},
 		{
 			client: Client{
@@ -36,7 +36,7 @@ func TestGetEndpoint(t *testing.T) {
 				Region:  "us-west-2",
 				Verbose: true,
 			},
-			endpoint: "https://api_id.execute-api.us-west-2.amazonaws.com/",
+			endpoint: "https://api_id.execute-api.us-west-2.amazonaws.com",
 		},
 	}
 
