@@ -600,23 +600,6 @@ func TestCreateOptions_Check(t *testing.T) {
 		err     error
 	}{
 		{
-			options: CreateOptions{},
-			err:     errors.New("invalid subject"),
-		},
-		{
-			options: CreateOptions{
-				Subject: "subject",
-			},
-			err: errors.New("invalid from"),
-		},
-		{
-			options: CreateOptions{
-				Subject: "subject",
-				From:    []string{"from"},
-			},
-			err: errors.New("invalid to"),
-		},
-		{
 			options: CreateOptions{
 				Subject: "subject",
 				From:    []string{"from"},
