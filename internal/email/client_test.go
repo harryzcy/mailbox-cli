@@ -719,10 +719,11 @@ func TestClient_Create(t *testing.T) {
 		},
 		{
 			client: Client{
-				Verbose: true,
+				Endpoint: "https://httpbin.org/anything",
+				Verbose:  true,
 			},
 			options: CreateOptions{},
-			err:     errors.New("invalid subject"),
+			err:     nil,
 		},
 		{
 			client: Client{
