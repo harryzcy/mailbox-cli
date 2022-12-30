@@ -340,18 +340,6 @@ type CreateOptions struct {
 }
 
 func (o CreateOptions) check() error {
-	if o.Subject == "" {
-		return errors.New("invalid subject")
-	}
-
-	if len(o.From) == 0 {
-		return errors.New("invalid from")
-	}
-
-	if len(o.To) == 0 {
-		return errors.New("invalid to")
-	}
-
 	if o.GenerateText != "on" && o.GenerateText != "off" && o.GenerateText != "auto" {
 		return errors.New("invalid generate-text")
 	}
