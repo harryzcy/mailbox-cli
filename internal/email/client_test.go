@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -50,7 +49,7 @@ func TestClient_Request(t *testing.T) {
 	timeoutCtx, cancel := context.WithTimeout(context.Background(), time.Nanosecond) // used by one test case
 	defer cancel()
 	defer func() {
-		ioReadall = ioutil.ReadAll
+		ioReadall = io.ReadAll
 	}()
 
 	tests := []struct {
@@ -75,7 +74,7 @@ func TestClient_Request(t *testing.T) {
 			path:      "/get",
 			query:     url.Values{},
 			payload:   []byte(""),
-			ioReadall: ioutil.ReadAll,
+			ioReadall: io.ReadAll,
 			err:       nil,
 		},
 		{
@@ -90,7 +89,7 @@ func TestClient_Request(t *testing.T) {
 			path:      "/text",
 			query:     url.Values{},
 			payload:   []byte(""),
-			ioReadall: ioutil.ReadAll,
+			ioReadall: io.ReadAll,
 			err:       nil,
 		},
 		{
@@ -146,7 +145,7 @@ func TestClient_Request(t *testing.T) {
 			if test.ioReadall != nil {
 				ioReadall = test.ioReadall
 			} else {
-				ioReadall = ioutil.ReadAll
+				ioReadall = io.ReadAll
 			}
 
 			data, err := test.client.request(test.ctx, test.method, test.path, test.query, test.payload)
@@ -204,7 +203,7 @@ func TestListOptions_Check(t *testing.T) {
 
 func TestClient_List(t *testing.T) {
 	defer func() {
-		ioReadall = ioutil.ReadAll
+		ioReadall = io.ReadAll
 	}()
 
 	tests := []struct {
@@ -267,7 +266,7 @@ func TestClient_List(t *testing.T) {
 			if test.ioReadall != nil {
 				ioReadall = test.ioReadall
 			} else {
-				ioReadall = ioutil.ReadAll
+				ioReadall = io.ReadAll
 			}
 
 			resp, err := test.client.List(test.options)
@@ -314,7 +313,7 @@ func TestGetOptions_Check(t *testing.T) {
 
 func TestClient_Get(t *testing.T) {
 	defer func() {
-		ioReadall = ioutil.ReadAll
+		ioReadall = io.ReadAll
 	}()
 
 	tests := []struct {
@@ -366,7 +365,7 @@ func TestClient_Get(t *testing.T) {
 			if test.ioReadall != nil {
 				ioReadall = test.ioReadall
 			} else {
-				ioReadall = ioutil.ReadAll
+				ioReadall = io.ReadAll
 			}
 
 			resp, err := test.client.Get(test.options)
