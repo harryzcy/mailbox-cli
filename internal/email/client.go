@@ -6,9 +6,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
@@ -43,7 +44,7 @@ func (c *Client) loadCredentials(ctx context.Context) error {
 	return nil
 }
 
-var ioReadall = ioutil.ReadAll
+var ioReadall = io.ReadAll
 
 func (c Client) request(ctx context.Context, method string, path string, query url.Values, payload []byte) (string, error) {
 	body := bytes.NewReader(payload)
@@ -352,7 +353,7 @@ func (o *CreateOptions) loadFile() error {
 		return nil
 	}
 
-	data, err := ioutil.ReadFile(o.File)
+	data, err := os.ReadFile(o.File)
 	if err != nil {
 		return err
 	}
@@ -447,7 +448,7 @@ func (o *SaveOptions) loadFile() error {
 		return nil
 	}
 
-	data, err := ioutil.ReadFile(o.File)
+	data, err := os.ReadFile(o.File)
 	if err != nil {
 		return err
 	}
