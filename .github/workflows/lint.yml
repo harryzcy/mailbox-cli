@@ -1,12 +1,14 @@
-name: Go Lint
+name: Lint
 
 on:
   push:
-    tags:
-      - v*
+    branches:
+      - "**"
+    tags-ignore:
+      - "v*"
+  pull_request:
     branches:
       - main
-  pull_request:
 
 jobs:
   go-lint:
