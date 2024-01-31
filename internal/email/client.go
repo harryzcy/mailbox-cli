@@ -166,7 +166,7 @@ func (c *Client) List(options ListOptions) (string, error) {
 		return "", err
 	}
 
-	return string(result), nil
+	return result, nil
 }
 
 type GetOptions struct {
@@ -205,7 +205,7 @@ func (c *Client) Get(options GetOptions) (string, error) {
 		return "", err
 	}
 
-	return string(result), nil
+	return result, nil
 }
 
 type TrashOptions struct {
@@ -244,7 +244,7 @@ func (c *Client) Trash(options TrashOptions) (string, error) {
 		return "", err
 	}
 
-	return string(result), nil
+	return result, nil
 }
 
 type UntrashOptions struct {
@@ -283,7 +283,7 @@ func (c *Client) Untrash(options UntrashOptions) (string, error) {
 		return "", err
 	}
 
-	return string(result), nil
+	return result, nil
 }
 
 type DeleteOptions struct {
@@ -322,7 +322,7 @@ func (c *Client) Delete(options DeleteOptions) (string, error) {
 		return "", err
 	}
 
-	return string(result), nil
+	return result, nil
 }
 
 type CreateOptions struct {
@@ -399,7 +399,7 @@ func (c *Client) Create(options CreateOptions) (string, error) {
 		return "", err
 	}
 
-	return string(result), err
+	return result, err
 }
 
 type SaveOptions struct {
@@ -488,7 +488,7 @@ func (c *Client) Save(options SaveOptions) (string, error) {
 	q := url.Values{}
 	result, err := c.request(ctx, http.MethodPut, "/emails/"+options.MessageID, q, body)
 
-	return string(result), err
+	return result, err
 }
 
 type SendOptions struct {
@@ -527,5 +527,5 @@ func (c *Client) Send(options SendOptions) (string, error) {
 		return "", err
 	}
 
-	return string(result), nil
+	return result, nil
 }
