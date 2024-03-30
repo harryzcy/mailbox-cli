@@ -133,7 +133,7 @@ func TestClient_Request(t *testing.T) {
 				}),
 			},
 			path: "/get",
-			ioReadall: func(r io.Reader) ([]byte, error) {
+			ioReadall: func(_ io.Reader) ([]byte, error) {
 				return nil, errors.New("error")
 			},
 			err: errors.New("error"),
@@ -250,7 +250,7 @@ func TestClient_List(t *testing.T) {
 				Type:  EmailTypeInbox,
 				Order: OrderDesc,
 			},
-			ioReadall: func(r io.Reader) ([]byte, error) {
+			ioReadall: func(_ io.Reader) ([]byte, error) {
 				return nil, errors.New("error")
 			},
 			args: map[string]interface{}{
@@ -353,7 +353,7 @@ func TestClient_Get(t *testing.T) {
 			options: GetOptions{
 				MessageID: "message-id",
 			},
-			ioReadall: func(r io.Reader) ([]byte, error) {
+			ioReadall: func(_ io.Reader) ([]byte, error) {
 				return nil, errors.New("error")
 			},
 			err: errors.New("error"),
