@@ -96,6 +96,7 @@ var createCmd = &cobra.Command{
 		if err != nil {
 			cmd.PrintErrln(err)
 			osExit(1)
+			return
 		}
 
 		cmd.Println(result)
