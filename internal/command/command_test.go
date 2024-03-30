@@ -3,6 +3,7 @@ package command
 import (
 	"testing"
 
+	"github.com/harryzcy/mailbox-cli/internal/email"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -80,7 +81,7 @@ func TestCreate(t *testing.T) {
 		ReplyTo:      []string{"replyTo"},
 		Text:         "text",
 		HTML:         "html",
-		GenerateText: "auto",
+		GenerateText: email.GenerateTextAuto,
 	})
 
 	assert.Nil(t, err)
@@ -102,7 +103,7 @@ func TestSave(t *testing.T) {
 		Body:         "body",
 		Text:         "text",
 		HTML:         "html",
-		GenerateText: "auto",
+		GenerateText: email.GenerateTextAuto,
 	})
 
 	assert.Nil(t, err)

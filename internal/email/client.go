@@ -340,8 +340,14 @@ type CreateOptions struct {
 	File string `json:"-"`
 }
 
+const (
+	GenerateTextOn   = "on"
+	GenerateTextOff  = "off"
+	GenerateTextAuto = "auto"
+)
+
 func (o CreateOptions) check() error {
-	if o.GenerateText != "on" && o.GenerateText != "off" && o.GenerateText != "auto" {
+	if o.GenerateText != GenerateTextOn && o.GenerateText != GenerateTextOff && o.GenerateText != GenerateTextAuto {
 		return errors.New("invalid generate-text")
 	}
 
@@ -369,7 +375,7 @@ func (c *Client) Create(options CreateOptions) (string, error) {
 	}
 
 	if options.GenerateText == "" {
-		options.GenerateText = "auto"
+		options.GenerateText = GenerateTextAuto
 	}
 	if err := options.check(); err != nil {
 		return "", err
@@ -436,7 +442,7 @@ func (o SaveOptions) check() error {
 		return errors.New("invalid to")
 	}
 
-	if o.GenerateText != "on" && o.GenerateText != "off" && o.GenerateText != "auto" {
+	if o.GenerateText != GenerateTextOn && o.GenerateText != GenerateTextOff && o.GenerateText != GenerateTextAuto {
 		return errors.New("invalid generate-text")
 	}
 
@@ -464,7 +470,7 @@ func (c *Client) Save(options SaveOptions) (string, error) {
 	}
 
 	if options.GenerateText == "" {
-		options.GenerateText = "auto"
+		options.GenerateText = GenerateTextAuto
 	}
 	if err := options.check(); err != nil {
 		return "", err
