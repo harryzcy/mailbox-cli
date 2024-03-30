@@ -16,7 +16,7 @@ func TestSignSDKRequest(t *testing.T) {
 
 	err = SignSDKRequest(context.Background(), req, &SignSDKRequestOptions{
 		Credentials: aws.CredentialsProviderFunc(
-			func(ctx context.Context) (aws.Credentials, error) {
+			func(_ context.Context) (aws.Credentials, error) {
 				return aws.Credentials{
 					AccessKeyID:     "accessKeyID",
 					SecretAccessKey: "secretAccessKey",
@@ -39,7 +39,7 @@ func TestSignSDKRequest_Error(t *testing.T) {
 
 	err = SignSDKRequest(context.Background(), req, &SignSDKRequestOptions{
 		Credentials: aws.CredentialsProviderFunc(
-			func(ctx context.Context) (aws.Credentials, error) {
+			func(_ context.Context) (aws.Credentials, error) {
 				return aws.Credentials{}, errors.New("error")
 			},
 		),

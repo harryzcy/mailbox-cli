@@ -12,7 +12,7 @@ var osExit = os.Exit
 var rootCmd = &cobra.Command{
 	Use:   "mailbox-cli",
 	Short: "Handle mailbox APIs from the command line.",
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, _ []string) {
 		err := cmd.Help()
 		if err != nil {
 			cmd.PrintErrln(err)
