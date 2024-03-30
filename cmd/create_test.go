@@ -34,7 +34,7 @@ func TestCreate(t *testing.T) {
 	assert.NotNil(t, err)
 
 	buf.Reset()
-	commandCreate = func(options command.CreateOptions) (string, error) {
+	commandCreate = func(_ command.CreateOptions) (string, error) {
 		return "result", errors.New("error")
 	}
 	rootCmd.SetArgs([]string{"create"})

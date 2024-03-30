@@ -15,7 +15,7 @@ func TestSave(t *testing.T) {
 	rootCmd.SetErr(buf)
 	rootCmd.SetArgs([]string{"save", "messageID"})
 
-	commandSave = func(options command.SaveOptions) (string, error) {
+	commandSave = func(_ command.SaveOptions) (string, error) {
 		return "result", nil
 	}
 	var exitCode int
@@ -34,7 +34,7 @@ func TestSave(t *testing.T) {
 	assert.NotNil(t, err)
 
 	buf.Reset()
-	commandSave = func(options command.SaveOptions) (string, error) {
+	commandSave = func(_ command.SaveOptions) (string, error) {
 		return "result", errors.New("error")
 	}
 	rootCmd.SetArgs([]string{"save", "messageID"})

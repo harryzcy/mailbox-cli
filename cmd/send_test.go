@@ -15,7 +15,7 @@ func TestSend(t *testing.T) {
 	rootCmd.SetErr(buf)
 	rootCmd.SetArgs([]string{"send", "message-id"})
 
-	commandSend = func(options command.SendOptions) (string, error) {
+	commandSend = func(_ command.SendOptions) (string, error) {
 		return "result", nil
 	}
 	var exitCode int
@@ -33,7 +33,7 @@ func TestSend(t *testing.T) {
 	assert.NotNil(t, err)
 
 	buf.Reset()
-	commandSend = func(options command.SendOptions) (string, error) {
+	commandSend = func(_ command.SendOptions) (string, error) {
 		return "result", errors.New("error")
 	}
 	rootCmd.SetArgs([]string{"send", "message-id"})

@@ -15,7 +15,7 @@ func TestGet(t *testing.T) {
 	rootCmd.SetErr(buf)
 	rootCmd.SetArgs([]string{"get", "message-id"})
 
-	commandGet = func(options command.GetOptions) (string, error) {
+	commandGet = func(_ command.GetOptions) (string, error) {
 		return "result", nil
 	}
 	var exitCode int
@@ -33,7 +33,7 @@ func TestGet(t *testing.T) {
 	assert.NotNil(t, err)
 
 	buf.Reset()
-	commandGet = func(options command.GetOptions) (string, error) {
+	commandGet = func(_ command.GetOptions) (string, error) {
 		return "result", errors.New("error")
 	}
 	rootCmd.SetArgs([]string{"get", "message-id"})
