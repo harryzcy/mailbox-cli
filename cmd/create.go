@@ -38,7 +38,7 @@ var createCmd = &cobra.Command{
 			cmd.PrintErrln(err)
 			osExit(1)
 		}
-		bcc, errs := cmd.Flags().GetStringArray("bcc")
+		bcc, err := cmd.Flags().GetStringArray("bcc")
 		if err != nil {
 			cmd.PrintErrln(err)
 			osExit(1)
