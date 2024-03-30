@@ -2,7 +2,8 @@
   "extends": [
     "config:best-practices",
     ":disableDependencyDashboard",
-    ":automergeMinor"
+    ":automergeMinor",
+    ":pinDependencies"
   ],
   "labels": [
     "dependencies"
