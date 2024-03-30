@@ -304,7 +304,7 @@ func (c *Client) Delete(options DeleteOptions) (string, error) {
 	}
 
 	if c.Verbose {
-		fmt.Printf("[DEBUG] Deleteing email\n")
+		fmt.Printf("[DEBUG] Deleting email\n")
 	}
 
 	ctx := context.Background()
