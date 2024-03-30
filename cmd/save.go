@@ -15,7 +15,12 @@ var saveCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		messageID := args[0]
 
-		verbose, _ := cmd.Flags().GetBool("verbose")
+		verbose, err := cmd.Flags().GetBool("verbose")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+
 		subject, _ := cmd.Flags().GetString("subject")
 		from, _ := cmd.Flags().GetStringArray("from")
 		to, _ := cmd.Flags().GetStringArray("to")

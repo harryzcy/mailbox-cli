@@ -13,7 +13,12 @@ var listCmd = &cobra.Command{
 	Short: "List emails",
 	Args:  cobra.ExactArgs(0),
 	Run: func(cmd *cobra.Command, args []string) {
-		verbose, _ := cmd.Flags().GetBool("verbose")
+		verbose, err := cmd.Flags().GetBool("verbose")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+
 		result, err := commandList(command.ListOptions{
 			APIID:    cmd.Flag("api-id").Value.String(),
 			Region:   cmd.Flag("region").Value.String(),
