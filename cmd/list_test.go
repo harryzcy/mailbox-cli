@@ -15,7 +15,7 @@ func TestList(t *testing.T) {
 	rootCmd.SetErr(buf)
 	rootCmd.SetArgs([]string{"list"})
 
-	commandList = func(options command.ListOptions) (string, error) {
+	commandList = func(_ command.ListOptions) (string, error) {
 		return "result", nil
 	}
 	var exitCode int
@@ -28,7 +28,7 @@ func TestList(t *testing.T) {
 
 	// error
 	buf.Reset()
-	commandList = func(options command.ListOptions) (string, error) {
+	commandList = func(_ command.ListOptions) (string, error) {
 		return "result", errors.New("error")
 	}
 	rootCmd.SetArgs([]string{"list"})

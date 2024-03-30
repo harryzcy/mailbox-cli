@@ -133,7 +133,7 @@ func TestClient_Request(t *testing.T) {
 				}),
 			},
 			path: "/get",
-			ioReadall: func(r io.Reader) ([]byte, error) {
+			ioReadall: func(_ io.Reader) ([]byte, error) {
 				return nil, errors.New("error")
 			},
 			err: errors.New("error"),
@@ -250,7 +250,7 @@ func TestClient_List(t *testing.T) {
 				Type:  EmailTypeInbox,
 				Order: OrderDesc,
 			},
-			ioReadall: func(r io.Reader) ([]byte, error) {
+			ioReadall: func(_ io.Reader) ([]byte, error) {
 				return nil, errors.New("error")
 			},
 			args: map[string]interface{}{
@@ -353,7 +353,7 @@ func TestClient_Get(t *testing.T) {
 			options: GetOptions{
 				MessageID: "message-id",
 			},
-			ioReadall: func(r io.Reader) ([]byte, error) {
+			ioReadall: func(_ io.Reader) ([]byte, error) {
 				return nil, errors.New("error")
 			},
 			err: errors.New("error"),
@@ -638,7 +638,7 @@ func TestCreateOptions_Check(t *testing.T) {
 				Subject:      "subject",
 				From:         []string{"from"},
 				To:           []string{"to"},
-				GenerateText: "auto",
+				GenerateText: GenerateTextAuto,
 			},
 			err: nil,
 		},
@@ -652,7 +652,7 @@ func TestCreateOptions_Check(t *testing.T) {
 				ReplyTo:      []string{"reply-to"},
 				Text:         "text",
 				HTML:         "html",
-				GenerateText: "auto",
+				GenerateText: GenerateTextAuto,
 			},
 			err: nil,
 		},
@@ -827,7 +827,7 @@ func TestSaveOptions_Check(t *testing.T) {
 				Subject:      "subject",
 				From:         []string{"from"},
 				To:           []string{"to"},
-				GenerateText: "auto",
+				GenerateText: GenerateTextAuto,
 			},
 			err: nil,
 		},
@@ -843,7 +843,7 @@ func TestSaveOptions_Check(t *testing.T) {
 				Body:         "body",
 				Text:         "text",
 				HTML:         "html",
-				GenerateText: "auto",
+				GenerateText: GenerateTextAuto,
 			},
 			err: nil,
 		},

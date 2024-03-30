@@ -15,7 +15,7 @@ func TestDelete(t *testing.T) {
 	rootCmd.SetErr(buf)
 	rootCmd.SetArgs([]string{"delete", "message-id"})
 
-	commandDelete = func(options command.DeleteOptions) (string, error) {
+	commandDelete = func(_ command.DeleteOptions) (string, error) {
 		return "result", nil
 	}
 	var exitCode int
@@ -33,7 +33,7 @@ func TestDelete(t *testing.T) {
 	assert.NotNil(t, err)
 
 	buf.Reset()
-	commandDelete = func(options command.DeleteOptions) (string, error) {
+	commandDelete = func(_ command.DeleteOptions) (string, error) {
 		return "result", errors.New("error")
 	}
 	rootCmd.SetArgs([]string{"delete", "message-id"})

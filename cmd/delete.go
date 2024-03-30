@@ -15,7 +15,12 @@ var deleteCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		messageID := args[0]
 
-		verbose, _ := cmd.Flags().GetBool("verbose")
+		verbose, err := cmd.Flags().GetBool("verbose")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+
 		result, err := commandDelete(command.DeleteOptions{
 			APIID:    cmd.Flag("api-id").Value.String(),
 			Region:   cmd.Flag("region").Value.String(),

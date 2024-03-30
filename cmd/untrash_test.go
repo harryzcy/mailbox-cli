@@ -15,7 +15,7 @@ func TestUntrash(t *testing.T) {
 	rootCmd.SetErr(buf)
 	rootCmd.SetArgs([]string{"untrash", "message-id"})
 
-	commandUntrash = func(options command.UntrashOptions) (string, error) {
+	commandUntrash = func(_ command.UntrashOptions) (string, error) {
 		return "result", nil
 	}
 	var exitCode int
@@ -33,7 +33,7 @@ func TestUntrash(t *testing.T) {
 	assert.NotNil(t, err)
 
 	buf.Reset()
-	commandUntrash = func(options command.UntrashOptions) (string, error) {
+	commandUntrash = func(_ command.UntrashOptions) (string, error) {
 		return "result", errors.New("error")
 	}
 	rootCmd.SetArgs([]string{"untrash", "message-id"})
