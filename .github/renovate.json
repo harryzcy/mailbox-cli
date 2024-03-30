@@ -1,18 +1,29 @@
 {
   "extends": [
-    "config:base",
-    ":disableDependencyDashboard"
+    "config:best-practices",
+    ":disableDependencyDashboard",
+    ":automergeMinor"
   ],
-  "labels": ["dependencies"],
+  "labels": [
+    "dependencies"
+  ],
   "packageRules": [
     {
       "matchPackagePatterns": [
         "*"
       ],
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
       "automerge": true,
       "groupName": "all non-major dependencies",
       "groupSlug": "all-non-major"
     }
+  ],
+  "postUpdateOptions": [
+    "goModTidy"
   ]
 }
