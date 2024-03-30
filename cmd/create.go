@@ -12,7 +12,7 @@ var createCmd = &cobra.Command{
 	Use:   "create",
 	Short: "Create an email",
 	Args:  cobra.ExactArgs(0),
-	Run: func(cmd *cobra.Command, args []string) {
+	Run: func(cmd *cobra.Command, _ []string) {
 		verbose, err := cmd.Flags().GetBool("verbose")
 		if err != nil {
 			cmd.PrintErrln(err)

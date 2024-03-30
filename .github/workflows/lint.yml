@@ -17,8 +17,6 @@ jobs:
   go-lint:
     name: Go Lint
     uses: harryzcy/github-actions/.github/workflows/golangci-lint.yml@main
-    with:
-      working-directory: ./
 
   super-linter:
     name: Super Linter

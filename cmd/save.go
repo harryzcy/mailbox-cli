@@ -21,18 +21,66 @@ var saveCmd = &cobra.Command{
 			osExit(1)
 		}
 
-		subject, _ := cmd.Flags().GetString("subject")
-		from, _ := cmd.Flags().GetStringArray("from")
-		to, _ := cmd.Flags().GetStringArray("to")
-		cc, _ := cmd.Flags().GetStringArray("cc")
-		bcc, _ := cmd.Flags().GetStringArray("bcc")
-		replyTo, _ := cmd.Flags().GetStringArray("reply-to")
-		body, _ := cmd.Flags().GetString("body")
-		text, _ := cmd.Flags().GetString("text")
-		html, _ := cmd.Flags().GetString("html")
-		file, _ := cmd.Flags().GetString("file")
-		generateText, _ := cmd.Flags().GetString("generate-text")
-		send, _ := cmd.Flags().GetBool("send")
+		subject, err := cmd.Flags().GetString("subject")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		from, err := cmd.Flags().GetStringArray("from")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		to, err := cmd.Flags().GetStringArray("to")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		cc, err := cmd.Flags().GetStringArray("cc")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		bcc, err := cmd.Flags().GetStringArray("bcc")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		replyTo, err := cmd.Flags().GetStringArray("reply-to")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		body, err := cmd.Flags().GetString("body")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		text, err := cmd.Flags().GetString("text")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		html, err := cmd.Flags().GetString("html")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		file, err := cmd.Flags().GetString("file")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		generateText, err := cmd.Flags().GetString("generate-text")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
+		send, err := cmd.Flags().GetBool("send")
+		if err != nil {
+			cmd.PrintErrln(err)
+			osExit(1)
+		}
 
 		result, err := commandSave(command.SaveOptions{
 			APIID:    cmd.Flag("api-id").Value.String(),
