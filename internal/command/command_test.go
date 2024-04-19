@@ -11,7 +11,7 @@ func TestGet(t *testing.T) {
 	_, err := Get(GetOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  "https://httpbingo.org/anything",
 		Verbose:   false,
 		MessageID: "messageID",
 	})
@@ -23,7 +23,7 @@ func TestList(t *testing.T) {
 	_, err := List(ListOptions{
 		APIID:    "",
 		Region:   "",
-		Endpoint: "https://httpbin.org/anything",
+		Endpoint: "https://.org/anything",
 		Verbose:  false,
 		Type:     "inbox",
 	})
@@ -35,7 +35,7 @@ func TestTrash(t *testing.T) {
 	_, err := Trash(TrashOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  "https://httpbingo.org/anything",
 		Verbose:   false,
 		MessageID: "messageID",
 	})
@@ -47,7 +47,7 @@ func TestUntrash(t *testing.T) {
 	_, err := Untrash(UntrashOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  "https://httpbingo.org/anything",
 		Verbose:   false,
 		MessageID: "messageID",
 	})
@@ -59,7 +59,7 @@ func TestDelete(t *testing.T) {
 	_, err := Delete(DeleteOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  "https://httpbingo.org/anything",
 		Verbose:   false,
 		MessageID: "messageID",
 	})
@@ -71,7 +71,7 @@ func TestCreate(t *testing.T) {
 	_, err := Create(CreateOptions{
 		APIID:        "",
 		Region:       "",
-		Endpoint:     "https://httpbin.org/anything",
+		Endpoint:     "https://httpbingo.org/anything",
 		Verbose:      false,
 		Subject:      "subject",
 		From:         []string{"from"},
@@ -92,7 +92,7 @@ func TestSave(t *testing.T) {
 		MessageID:    "messageID",
 		APIID:        "",
 		Region:       "",
-		Endpoint:     "https://httpbin.org/anything",
+		Endpoint:     "https://httpbingo.org/anything",
 		Verbose:      false,
 		Subject:      "subject",
 		From:         []string{"from"},
@@ -113,7 +113,7 @@ func TestSend(t *testing.T) {
 	_, err := Send(SendOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  "https://httpbingo.org/anything",
 		Verbose:   false,
 		MessageID: "messageID",
 	})
