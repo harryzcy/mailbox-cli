@@ -23,7 +23,7 @@ func TestList(t *testing.T) {
 	_, err := List(ListOptions{
 		APIID:    "",
 		Region:   "",
-		Endpoint: "https://.org/anything",
+		Endpoint: "https://httpbingo.org/anything",
 		Verbose:  false,
 		Type:     "inbox",
 	})
