@@ -1,21 +1,5 @@
 {
   "extends": [
-    "config:best-practices",
-    ":disableDependencyDashboard",
-    ":automergeMinor",
-    ":pinDependencies"
-  ],
-  "labels": [
-    "dependencies"
-  ],
-  "lockFileMaintenance": {
-    "enabled": true,
-    "labels": [
-      "dependencies",
-      "skip-changelog"
-    ]
-  },
-  "postUpdateOptions": [
-    "goModTidy"
+    "github>harryzcy/renovate-config"
   ]
 }
