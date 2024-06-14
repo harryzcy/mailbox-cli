@@ -65,7 +65,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: "https://httpbingo.org",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -80,7 +80,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: "https://httpbingo.org",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -94,7 +94,7 @@ func TestClient_Request(t *testing.T) {
 		},
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: "https://httpbingo.org",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -104,7 +104,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: "https://httpbingo.org",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, errors.New("error")
 				}),
@@ -114,7 +114,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: timeoutCtx,
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: "https://httpbingo.org",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -122,12 +122,12 @@ func TestClient_Request(t *testing.T) {
 			path:    "/get",
 			query:   url.Values{},
 			payload: []byte(""),
-			err:     &url.Error{Op: "Get", URL: "https://httpbin.org/get", Err: context.DeadlineExceeded},
+			err:     &url.Error{Op: "Get", URL: "https://httpbingo.org/get", Err: context.DeadlineExceeded},
 		},
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: "https://httpbingo.org",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -215,7 +215,7 @@ func TestClient_List(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -240,7 +240,7 @@ func TestClient_List(t *testing.T) {
 		},
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -324,7 +324,7 @@ func TestClient_Get(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -344,7 +344,7 @@ func TestClient_Get(t *testing.T) {
 		},
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -416,7 +416,7 @@ func TestClient_Trash(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -486,7 +486,7 @@ func TestClient_Untrash(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -556,7 +556,7 @@ func TestClient_Delete(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -705,7 +705,7 @@ func TestClient_Create(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -718,7 +718,7 @@ func TestClient_Create(t *testing.T) {
 		},
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Verbose:  true,
 			},
 			options: CreateOptions{},
@@ -896,7 +896,7 @@ func TestClient_Save(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -977,7 +977,7 @@ func TestClient_Send(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: "https://httpbingo.org/anything",
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
