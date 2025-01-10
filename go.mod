@@ -3,7 +3,7 @@ module github.com/harryzcy/mailbox-cli
 go 1.22
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.32.7
+	github.com/aws/aws-sdk-go-v2 v1.32.8
 	github.com/aws/aws-sdk-go-v2/config v1.28.7
 	github.com/spf13/cobra v1.8.1
 	github.com/stretchr/testify v1.10.0
