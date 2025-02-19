@@ -11,7 +11,7 @@ import (
 
 func TestGet(t *testing.T) {
 	buf := new(bytes.Buffer)
-	rootCmd.SetOutput(buf)
+	rootCmd.SetOut(buf)
 	rootCmd.SetErr(buf)
 	rootCmd.SetArgs([]string{"get", "message-id"})
 

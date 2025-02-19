@@ -9,7 +9,7 @@ import (
 
 func TestRoot(t *testing.T) {
 	buf := new(bytes.Buffer)
-	rootCmd.SetOutput(buf)
+	rootCmd.SetOut(buf)
 	rootCmd.SetErr(buf)
 	rootCmd.SetArgs([]string{})
 
