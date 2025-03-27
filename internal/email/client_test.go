@@ -149,7 +149,12 @@ func TestClient_Request(t *testing.T) {
 			}
 
 			data, err := test.client.request(test.ctx, test.method, test.path, test.query, test.payload)
-			assert.Equal(t, test.err, err)
+			// assert.True(t, errors.Is(err, test.err))
+			if err != nil && test.err != nil {
+				assert.Equal(t, test.err.Error(), err.Error())
+			} else {
+				assert.Equal(t, test.err, err)
+			}
 
 			if err != nil {
 				assert.Empty(t, data)

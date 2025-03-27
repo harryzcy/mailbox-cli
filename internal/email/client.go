@@ -92,8 +92,9 @@ func (c Client) request(ctx context.Context, method string, path string, query u
 		return "", err
 	}
 	defer func() {
-		closeErr := resp.Body.Close()
-		err = errors.Join(err, closeErr)
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			err = errors.Join(err, closeErr)
+		}
 	}()
 
 	if c.Verbose {
