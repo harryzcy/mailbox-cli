@@ -93,7 +93,7 @@ func (c Client) request(ctx context.Context, method string, path string, query u
 	}
 	defer func() {
 		closeErr := resp.Body.Close()
-		if err != nil {
+		if err == nil {
 			err = closeErr
 		}
 	}()
