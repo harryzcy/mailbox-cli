@@ -17,6 +17,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func assertErrorsEqual(t *testing.T, actual, expected error) {
+	if _, ok := actual.(interface{ Unwrap() []error }); ok {
+		errs := actual.(interface{ Unwrap() []error }).Unwrap()
+		assert.Contains(t, errs, expected)
+	} else {
+		assert.Equal(t, expected, actual)
+	}
+}
+
 func TestGetEndpoint(t *testing.T) {
 	tests := []struct {
 		client   Client
@@ -149,13 +158,7 @@ func TestClient_Request(t *testing.T) {
 			}
 
 			data, err := test.client.request(test.ctx, test.method, test.path, test.query, test.payload)
-			// assert.True(t, errors.Is(err, test.err))
-			if err != nil && test.err != nil {
-				assert.Equal(t, test.err.Error(), err.Error())
-			} else {
-				assert.Equal(t, test.err, err)
-			}
-
+			assertErrorsEqual(t, err, test.err)
 			if err != nil {
 				assert.Empty(t, data)
 				return
@@ -275,7 +278,7 @@ func TestClient_List(t *testing.T) {
 			}
 
 			resp, err := test.client.List(test.options)
-			assert.Equal(t, test.err, err)
+			assertErrorsEqual(t, err, test.err)
 			if err != nil {
 				return
 			}
@@ -374,7 +377,7 @@ func TestClient_Get(t *testing.T) {
 			}
 
 			resp, err := test.client.Get(test.options)
-			assert.Equal(t, test.err, err)
+			assertErrorsEqual(t, err, test.err)
 			if err != nil {
 				return
 			}
