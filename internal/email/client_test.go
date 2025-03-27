@@ -124,20 +124,20 @@ func TestClient_Request(t *testing.T) {
 			payload: []byte(""),
 			err:     &url.Error{Op: "Get", URL: "https://httpbin.org/get", Err: context.DeadlineExceeded},
 		},
-		// {
-		// 	ctx: context.Background(),
-		// 	client: Client{
-		// 		Endpoint: "https://httpbin.org",
-		// 		Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
-		// 			return aws.Credentials{}, nil
-		// 		}),
-		// 	},
-		// 	path: "/get",
-		// 	ioReadall: func(_ io.Reader) ([]byte, error) {
-		// 		return nil, errors.New("error")
-		// 	},
-		// 	err: errors.New("error"),
-		// },
+		{
+			ctx: context.Background(),
+			client: Client{
+				Endpoint: "https://httpbin.org",
+				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
+					return aws.Credentials{}, nil
+				}),
+			},
+			path: "/get",
+			ioReadall: func(_ io.Reader) ([]byte, error) {
+				return nil, errors.New("error")
+			},
+			err: errors.New("error"),
+		},
 	}
 
 	for i, test := range tests {
@@ -161,6 +161,9 @@ func TestClient_Request(t *testing.T) {
 				err = json.Unmarshal([]byte(data), &value)
 				assert.Nil(t, err)
 				assert.Contains(t, value["headers"], "Authorization")
+				if err != nil {
+					t.Log("data:", data)
+				}
 			}
 		})
 	}
