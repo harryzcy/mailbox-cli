@@ -157,7 +157,7 @@ func TestClient_Request(t *testing.T) {
 			}
 
 			if test.path != "/text" {
-				var value map[string]interface{}
+				var value map[string]any
 				err = json.Unmarshal([]byte(data), &value)
 				assert.Nil(t, err)
 				assert.Contains(t, value["headers"], "Authorization")
