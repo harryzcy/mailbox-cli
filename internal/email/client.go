@@ -46,7 +46,7 @@ func (c *Client) loadCredentials(ctx context.Context) error {
 
 var ioReadall = io.ReadAll
 
-func (c Client) request(ctx context.Context, method string, path string, query url.Values, payload []byte) (string, error) {
+func (c Client) request(ctx context.Context, method string, path string, query url.Values, payload []byte) (text string, err error) {
 	body := bytes.NewReader(payload)
 
 	if c.Verbose {
@@ -91,7 +91,11 @@ func (c Client) request(ctx context.Context, method string, path string, query u
 	if err != nil {
 		return "", err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		if closeErr := resp.Body.Close(); closeErr != nil {
+			err = errors.Join(err, closeErr)
+		}
+	}()
 
 	if c.Verbose {
 		fmt.Printf("[DEBUG] Response status: %d\n", resp.StatusCode)
