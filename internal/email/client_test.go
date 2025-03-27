@@ -149,9 +149,8 @@ func TestClient_Request(t *testing.T) {
 			}
 
 			data, err := test.client.request(test.ctx, test.method, test.path, test.query, test.payload)
-			if _, ok := err.(interface{ Unwrap() []error }); ok {
-				errs := err.(interface{ Unwrap() []error }).Unwrap()
-				assert.Contains(t, errs, test.err)
+			if err != nil && test.err != nil {
+				assert.Equal(t, test.err.Error(), err.Error())
 			} else {
 				assert.Equal(t, test.err, err)
 			}
