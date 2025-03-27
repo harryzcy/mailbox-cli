@@ -161,9 +161,6 @@ func TestClient_Request(t *testing.T) {
 				err = json.Unmarshal([]byte(data), &value)
 				assert.Nil(t, err)
 				assert.Contains(t, value["headers"], "Authorization")
-				if err != nil {
-					t.Log("data:", data)
-				}
 			}
 		})
 	}
