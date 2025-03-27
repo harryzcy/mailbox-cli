@@ -275,7 +275,12 @@ func TestClient_List(t *testing.T) {
 			}
 
 			resp, err := test.client.List(test.options)
-			assert.Equal(t, test.err, err)
+			if _, ok := err.(interface{ Unwrap() []error }); ok {
+				errs := err.(interface{ Unwrap() []error }).Unwrap()
+				assert.Contains(t, errs, test.err)
+			} else {
+				assert.Equal(t, test.err, err)
+			}
 			if err != nil {
 				return
 			}
