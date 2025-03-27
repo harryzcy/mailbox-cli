@@ -46,7 +46,7 @@ func (c *Client) loadCredentials(ctx context.Context) error {
 
 var ioReadall = io.ReadAll
 
-func (c Client) request(ctx context.Context, method string, path string, query url.Values, payload []byte) (string, error) {
+func (c Client) request(ctx context.Context, method string, path string, query url.Values, payload []byte) (data string, err error) {
 	body := bytes.NewReader(payload)
 
 	if c.Verbose {
@@ -91,30 +91,35 @@ func (c Client) request(ctx context.Context, method string, path string, query u
 	if err != nil {
 		return "", err
 	}
-	defer resp.Body.Close()
+	defer func() {
+		closeErr := resp.Body.Close()
+		if err != nil {
+			err = closeErr
+		}
+	}()
 
 	if c.Verbose {
 		fmt.Printf("[DEBUG] Response status: %d\n", resp.StatusCode)
 	}
 
-	data, err := ioReadall(resp.Body)
+	bytes, err := ioReadall(resp.Body)
 	if err != nil {
 		return "", err
 	}
 
 	if c.Verbose {
 		fmt.Printf("[DEBUG] Content-Type: %s\n", resp.Header["Content-Type"][0])
-		fmt.Printf("[DEBUG] Response: %s\n", string(data))
+		fmt.Printf("[DEBUG] Response: %s\n", string(bytes))
 	}
 
 	if resp.Header["Content-Type"][0] == "application/json" {
 		if c.Verbose {
 			fmt.Printf("[DEBUG] Prettifying output\n")
 		}
-		return prettyResult(data)
+		return prettyResult(bytes)
 	}
 
-	return string(data), nil
+	return string(bytes), nil
 }
 
 type ListOptions struct {
