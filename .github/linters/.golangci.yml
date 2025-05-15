@@ -1,3 +1,6 @@
-linters-settings:
-  goconst:
-    ignore-strings: "/emails.?+"
+version: "2"
+linters:
+  settings:
+    goconst:
+      ignore-string-values:
+        - "/emails.?+"
