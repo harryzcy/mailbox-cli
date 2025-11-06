@@ -12,7 +12,7 @@ import (
 
 func TestGet(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Request received")
+		_, _ = fmt.Fprintln(w, "Request received")
 	}))
 	defer ts.Close()
 
