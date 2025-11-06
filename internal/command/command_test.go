@@ -116,10 +116,18 @@ func TestDelete(t *testing.T) {
 }
 
 func TestCreate(t *testing.T) {
+	received := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
+	}))
+	defer ts.Close()
+
 	_, err := Create(CreateOptions{
 		APIID:        "",
 		Region:       "",
-		Endpoint:     "https://httpbin.org/anything",
+		Endpoint:     ts.URL,
 		Verbose:      false,
 		Subject:      "subject",
 		From:         []string{"from"},
@@ -133,6 +141,7 @@ func TestCreate(t *testing.T) {
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
 
 func TestSave(t *testing.T) {
