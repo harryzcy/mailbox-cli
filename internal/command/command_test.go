@@ -1,6 +1,9 @@
 package command
 
 import (
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/harryzcy/mailbox-cli/internal/email"
@@ -8,10 +11,15 @@ import (
 )
 
 func TestGet(t *testing.T) {
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Request received")
+	}))
+	defer ts.Close()
+
 	_, err := Get(GetOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  ts.URL,
 		Verbose:   false,
 		MessageID: "messageID",
 	})
