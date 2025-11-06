@@ -53,15 +53,24 @@ func TestList(t *testing.T) {
 }
 
 func TestTrash(t *testing.T) {
+	received := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
+	}))
+	defer ts.Close()
+
 	_, err := Trash(TrashOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  ts.URL,
 		Verbose:   false,
 		MessageID: "messageID",
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
 
 func TestUntrash(t *testing.T) {
