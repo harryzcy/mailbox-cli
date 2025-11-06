@@ -1,6 +1,9 @@
 package command
 
 import (
+	"fmt"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 
 	"github.com/harryzcy/mailbox-cli/internal/email"
@@ -8,70 +11,123 @@ import (
 )
 
 func TestGet(t *testing.T) {
+	received := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
+	}))
+	defer ts.Close()
+
 	_, err := Get(GetOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  ts.URL,
 		Verbose:   false,
 		MessageID: "messageID",
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
 
 func TestList(t *testing.T) {
+	received := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
+	}))
+	defer ts.Close()
+
 	_, err := List(ListOptions{
 		APIID:    "",
 		Region:   "",
-		Endpoint: "https://httpbin.org/anything",
+		Endpoint: ts.URL,
 		Verbose:  false,
 		Type:     "inbox",
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
 
 func TestTrash(t *testing.T) {
+	received := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
+	}))
+	defer ts.Close()
+
 	_, err := Trash(TrashOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  ts.URL,
 		Verbose:   false,
 		MessageID: "messageID",
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
 
 func TestUntrash(t *testing.T) {
+	received := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
+	}))
+	defer ts.Close()
+
 	_, err := Untrash(UntrashOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  ts.URL,
 		Verbose:   false,
 		MessageID: "messageID",
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
 
 func TestDelete(t *testing.T) {
+	received := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
+	}))
+	defer ts.Close()
+
 	_, err := Delete(DeleteOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  ts.URL,
 		Verbose:   false,
 		MessageID: "messageID",
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
 
 func TestCreate(t *testing.T) {
+	received := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
+	}))
+	defer ts.Close()
+
 	_, err := Create(CreateOptions{
 		APIID:        "",
 		Region:       "",
-		Endpoint:     "https://httpbin.org/anything",
+		Endpoint:     ts.URL,
 		Verbose:      false,
 		Subject:      "subject",
 		From:         []string{"from"},
@@ -85,14 +141,23 @@ func TestCreate(t *testing.T) {
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
 
 func TestSave(t *testing.T) {
+	received := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
+	}))
+	defer ts.Close()
+
 	_, err := Save(SaveOptions{
 		MessageID:    "messageID",
 		APIID:        "",
 		Region:       "",
-		Endpoint:     "https://httpbin.org/anything",
+		Endpoint:     ts.URL,
 		Verbose:      false,
 		Subject:      "subject",
 		From:         []string{"from"},
@@ -107,16 +172,26 @@ func TestSave(t *testing.T) {
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
 
 func TestSend(t *testing.T) {
+	received := false
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
+	}))
+	defer ts.Close()
+
 	_, err := Send(SendOptions{
 		APIID:     "",
 		Region:    "",
-		Endpoint:  "https://httpbin.org/anything",
+		Endpoint:  ts.URL,
 		Verbose:   false,
 		MessageID: "messageID",
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
