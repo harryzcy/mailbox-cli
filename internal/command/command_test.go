@@ -11,8 +11,11 @@ import (
 )
 
 func TestGet(t *testing.T) {
+	received := false
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		_, _ = fmt.Fprintln(w, "Request received")
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+		received = true
 	}))
 	defer ts.Close()
 
@@ -25,6 +28,7 @@ func TestGet(t *testing.T) {
 	})
 
 	assert.Nil(t, err)
+	assert.True(t, received, "Expected request to be received by the test server")
 }
 
 func TestList(t *testing.T) {
