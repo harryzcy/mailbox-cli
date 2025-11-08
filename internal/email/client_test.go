@@ -6,6 +6,7 @@ import (
 	"errors"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"os"
 	"strconv"
@@ -24,6 +25,14 @@ func assertErrorsEqual(t *testing.T, actual, expected error) {
 	} else {
 		assert.Equal(t, expected, actual)
 	}
+}
+
+func setupTestServer(t *testing.T, handlerFunc http.HandlerFunc) *httptest.Server {
+	ts := httptest.NewServer(handlerFunc)
+	t.Cleanup(func() {
+		ts.Close()
+	})
+	return ts
 }
 
 func TestGetEndpoint(t *testing.T) {
@@ -55,6 +64,21 @@ func TestGetEndpoint(t *testing.T) {
 }
 
 func TestClient_Request(t *testing.T) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/text" {
+			_, _ = w.Write([]byte("plain text response"))
+			return
+		}
+
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	timeoutCtx, cancel := context.WithTimeout(context.Background(), time.Nanosecond) // used by one test case
 	defer cancel()
 	defer func() {
@@ -74,7 +98,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -89,7 +113,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -103,7 +127,7 @@ func TestClient_Request(t *testing.T) {
 		},
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -113,7 +137,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, errors.New("error")
 				}),
@@ -123,7 +147,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: timeoutCtx,
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -131,12 +155,12 @@ func TestClient_Request(t *testing.T) {
 			path:    "/get",
 			query:   url.Values{},
 			payload: []byte(""),
-			err:     &url.Error{Op: "Get", URL: "https://httpbin.org/get", Err: context.DeadlineExceeded},
+			err:     &url.Error{Op: "Get", URL: ts.URL + "/get", Err: context.DeadlineExceeded},
 		},
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -214,6 +238,25 @@ func TestClient_List(t *testing.T) {
 		ioReadall = io.ReadAll
 	}()
 
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		args := map[string]any{}
+		for key, values := range r.URL.Query() {
+			if len(values) == 1 {
+				args[key] = values[0]
+			} else {
+				args[key] = values
+			}
+		}
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+			"args": args,
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client    Client
 		options   ListOptions
@@ -223,7 +266,7 @@ func TestClient_List(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -248,7 +291,7 @@ func TestClient_List(t *testing.T) {
 		},
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -324,6 +367,16 @@ func TestClient_Get(t *testing.T) {
 		ioReadall = io.ReadAll
 	}()
 
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client    Client
 		options   GetOptions
@@ -332,7 +385,7 @@ func TestClient_Get(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -352,7 +405,7 @@ func TestClient_Get(t *testing.T) {
 		},
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -417,6 +470,16 @@ func TestTrashOptions_Check(t *testing.T) {
 }
 
 func TestClient_Trash(t *testing.T) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client  Client
 		options TrashOptions
@@ -424,7 +487,7 @@ func TestClient_Trash(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -487,6 +550,16 @@ func TestUntrashOptions_Check(t *testing.T) {
 }
 
 func TestClient_Untrash(t *testing.T) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client  Client
 		options UntrashOptions
@@ -494,7 +567,7 @@ func TestClient_Untrash(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -557,6 +630,16 @@ func TestDeleteOptions_Check(t *testing.T) {
 }
 
 func TestClient_Delete(t *testing.T) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client  Client
 		options DeleteOptions
@@ -564,7 +647,7 @@ func TestClient_Delete(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -706,6 +789,16 @@ func TestCreateOptions_LoadFile(t *testing.T) {
 }
 
 func TestClient_Create(t *testing.T) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client  Client
 		options CreateOptions
@@ -713,7 +806,7 @@ func TestClient_Create(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -726,7 +819,7 @@ func TestClient_Create(t *testing.T) {
 		},
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Verbose:  true,
 			},
 			options: CreateOptions{},
@@ -897,6 +990,16 @@ func TestSaveOptions_LoadFile(t *testing.T) {
 }
 
 func TestClient_Save(t *testing.T) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client  Client
 		options SaveOptions
@@ -904,7 +1007,7 @@ func TestClient_Save(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -978,6 +1081,16 @@ func TestSendOptions_Check(t *testing.T) {
 }
 
 func TestClient_Send(t *testing.T) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client  Client
 		options SendOptions
@@ -985,7 +1098,7 @@ func TestClient_Send(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
