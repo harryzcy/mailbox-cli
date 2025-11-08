@@ -234,6 +234,11 @@ func TestClient_List(t *testing.T) {
 	}()
 
 	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/text" {
+			w.Write([]byte("plain text response"))
+			return
+		}
+
 		args := map[string]any{}
 		for key, values := range r.URL.Query() {
 			if len(values) == 1 {
