@@ -108,7 +108,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -122,7 +122,7 @@ func TestClient_Request(t *testing.T) {
 		},
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -132,7 +132,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, errors.New("error")
 				}),
@@ -142,7 +142,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: timeoutCtx,
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -155,7 +155,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
