@@ -150,7 +150,7 @@ func TestClient_Request(t *testing.T) {
 			path:    "/get",
 			query:   url.Values{},
 			payload: []byte(""),
-			err:     &url.Error{Op: "Get", URL: "https://httpbin.org/get", Err: context.DeadlineExceeded},
+			err:     &url.Error{Op: "Get", URL: ts.URL + "/get", Err: context.DeadlineExceeded},
 		},
 		{
 			ctx: context.Background(),
