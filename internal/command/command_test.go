@@ -10,14 +10,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func setupTestServer(t *testing.T, handlerFunc http.HandlerFunc) *httptest.Server {
+	ts := httptest.NewServer(handlerFunc)
+	t.Cleanup(func() {
+		ts.Close()
+	})
+	return ts
+}
+
 func TestGet(t *testing.T) {
 	received := false
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
 		_, err := fmt.Fprintln(w, "Request received")
 		assert.Nil(t, err)
 		received = true
-	}))
-	defer ts.Close()
+	})
 
 	_, err := Get(GetOptions{
 		APIID:     "",
@@ -33,12 +40,11 @@ func TestGet(t *testing.T) {
 
 func TestList(t *testing.T) {
 	received := false
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
 		_, err := fmt.Fprintln(w, "Request received")
 		assert.Nil(t, err)
 		received = true
-	}))
-	defer ts.Close()
+	})
 
 	_, err := List(ListOptions{
 		APIID:    "",
@@ -54,12 +60,11 @@ func TestList(t *testing.T) {
 
 func TestTrash(t *testing.T) {
 	received := false
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
 		_, err := fmt.Fprintln(w, "Request received")
 		assert.Nil(t, err)
 		received = true
-	}))
-	defer ts.Close()
+	})
 
 	_, err := Trash(TrashOptions{
 		APIID:     "",
@@ -75,12 +80,11 @@ func TestTrash(t *testing.T) {
 
 func TestUntrash(t *testing.T) {
 	received := false
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
 		_, err := fmt.Fprintln(w, "Request received")
 		assert.Nil(t, err)
 		received = true
-	}))
-	defer ts.Close()
+	})
 
 	_, err := Untrash(UntrashOptions{
 		APIID:     "",
@@ -96,12 +100,11 @@ func TestUntrash(t *testing.T) {
 
 func TestDelete(t *testing.T) {
 	received := false
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
 		_, err := fmt.Fprintln(w, "Request received")
 		assert.Nil(t, err)
 		received = true
-	}))
-	defer ts.Close()
+	})
 
 	_, err := Delete(DeleteOptions{
 		APIID:     "",
@@ -117,12 +120,11 @@ func TestDelete(t *testing.T) {
 
 func TestCreate(t *testing.T) {
 	received := false
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
 		_, err := fmt.Fprintln(w, "Request received")
 		assert.Nil(t, err)
 		received = true
-	}))
-	defer ts.Close()
+	})
 
 	_, err := Create(CreateOptions{
 		APIID:        "",
@@ -146,12 +148,11 @@ func TestCreate(t *testing.T) {
 
 func TestSave(t *testing.T) {
 	received := false
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
 		_, err := fmt.Fprintln(w, "Request received")
 		assert.Nil(t, err)
 		received = true
-	}))
-	defer ts.Close()
+	})
 
 	_, err := Save(SaveOptions{
 		MessageID:    "messageID",
@@ -177,12 +178,11 @@ func TestSave(t *testing.T) {
 
 func TestSend(t *testing.T) {
 	received := false
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
 		_, err := fmt.Fprintln(w, "Request received")
 		assert.Nil(t, err)
 		received = true
-	}))
-	defer ts.Close()
+	})
 
 	_, err := Send(SendOptions{
 		APIID:     "",
