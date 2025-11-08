@@ -234,11 +234,19 @@ func TestClient_List(t *testing.T) {
 	}()
 
 	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		args := map[string]any{}
+		for key, values := range r.URL.Query() {
+			if len(values) == 1 {
+				args[key] = values[0]
+			} else {
+				args[key] = values
+			}
+		}
 		response := map[string]any{
 			"headers": map[string]any{
 				"Authorization": r.Header.Get("Authorization"),
 			},
-			"args": r.URL.Query(),
+			"args": args,
 		}
 		err := json.NewEncoder(w).Encode(response)
 		assert.Nil(t, err)
