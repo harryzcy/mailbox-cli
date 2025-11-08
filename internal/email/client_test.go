@@ -66,7 +66,7 @@ func TestGetEndpoint(t *testing.T) {
 func TestClient_Request(t *testing.T) {
 	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == "/text" {
-			w.Write([]byte("plain text response"))
+			_, _ = w.Write([]byte("plain text response"))
 			return
 		}
 
