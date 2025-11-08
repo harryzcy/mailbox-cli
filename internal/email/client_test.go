@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -66,7 +65,12 @@ func TestGetEndpoint(t *testing.T) {
 
 func TestClient_Request(t *testing.T) {
 	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
-		_, err := fmt.Fprintln(w, "{}")
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
 		assert.Nil(t, err)
 	})
 
