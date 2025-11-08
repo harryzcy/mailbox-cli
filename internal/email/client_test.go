@@ -233,6 +233,16 @@ func TestClient_List(t *testing.T) {
 		ioReadall = io.ReadAll
 	}()
 
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client    Client
 		options   ListOptions
@@ -242,7 +252,7 @@ func TestClient_List(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
