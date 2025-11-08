@@ -238,6 +238,7 @@ func TestClient_List(t *testing.T) {
 			"headers": map[string]any{
 				"Authorization": r.Header.Get("Authorization"),
 			},
+			"args": r.URL.Query(),
 		}
 		err := json.NewEncoder(w).Encode(response)
 		assert.Nil(t, err)
