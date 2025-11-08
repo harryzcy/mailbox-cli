@@ -247,7 +247,7 @@ func TestClient_List(t *testing.T) {
 		client    Client
 		options   ListOptions
 		ioReadall func(io.Reader) ([]byte, error)
-		args      map[string]interface{}
+		args      map[string]any
 		err       error
 	}{
 		{
@@ -262,7 +262,7 @@ func TestClient_List(t *testing.T) {
 				Type:  EmailTypeInbox,
 				Order: OrderDesc,
 			},
-			args: map[string]interface{}{
+			args: map[string]any{
 				"type":  "inbox",
 				"order": "desc",
 			},
@@ -290,7 +290,7 @@ func TestClient_List(t *testing.T) {
 			ioReadall: func(_ io.Reader) ([]byte, error) {
 				return nil, errors.New("error")
 			},
-			args: map[string]interface{}{
+			args: map[string]any{
 				"type":  "inbox",
 				"order": "desc",
 			},
@@ -314,7 +314,7 @@ func TestClient_List(t *testing.T) {
 
 			assert.NotEmpty(t, resp)
 
-			var values map[string]interface{}
+			var values map[string]any
 			err = json.Unmarshal([]byte(resp), &values)
 			assert.Nil(t, err)
 
@@ -413,7 +413,7 @@ func TestClient_Get(t *testing.T) {
 
 			assert.NotEmpty(t, resp)
 
-			var values map[string]interface{}
+			var values map[string]any
 			err = json.Unmarshal([]byte(resp), &values)
 			assert.Nil(t, err)
 		})
@@ -483,7 +483,7 @@ func TestClient_Trash(t *testing.T) {
 
 			assert.NotEmpty(t, resp)
 
-			var values map[string]interface{}
+			var values map[string]any
 			err = json.Unmarshal([]byte(resp), &values)
 			assert.Nil(t, err)
 		})
@@ -553,7 +553,7 @@ func TestClient_Untrash(t *testing.T) {
 
 			assert.NotEmpty(t, resp)
 
-			var values map[string]interface{}
+			var values map[string]any
 			err = json.Unmarshal([]byte(resp), &values)
 			assert.Nil(t, err)
 		})
@@ -623,7 +623,7 @@ func TestClient_Delete(t *testing.T) {
 
 			assert.NotEmpty(t, resp)
 
-			var values map[string]interface{}
+			var values map[string]any
 			err = json.Unmarshal([]byte(resp), &values)
 			assert.Nil(t, err)
 		})
@@ -782,7 +782,7 @@ func TestClient_Create(t *testing.T) {
 
 			assert.NotEmpty(t, resp)
 
-			var values map[string]interface{}
+			var values map[string]any
 			err = json.Unmarshal([]byte(resp), &values)
 			assert.Nil(t, err)
 		})
@@ -974,7 +974,7 @@ func TestClient_Save(t *testing.T) {
 
 			assert.NotEmpty(t, resp)
 
-			var values map[string]interface{}
+			var values map[string]any
 			err = json.Unmarshal([]byte(resp), &values)
 			assert.Nil(t, err)
 		})
@@ -1044,7 +1044,7 @@ func TestClient_Send(t *testing.T) {
 
 			assert.NotEmpty(t, resp)
 
-			var values map[string]interface{}
+			var values map[string]any
 			err = json.Unmarshal([]byte(resp), &values)
 			assert.Nil(t, err)
 		})

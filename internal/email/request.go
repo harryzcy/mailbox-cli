@@ -13,7 +13,7 @@ func addQuery(q url.Values, name string, value string) {
 }
 
 func prettyResult(result []byte) (string, error) {
-	var data map[string]interface{}
+	var data map[string]any
 	err := json.Unmarshal(result, &data)
 	if err != nil {
 		return "", err
