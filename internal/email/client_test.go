@@ -66,7 +66,7 @@ func TestGetEndpoint(t *testing.T) {
 
 func TestClient_Request(t *testing.T) {
 	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
-		_, err := fmt.Fprintln(w, "Request received")
+		_, err := fmt.Fprintln(w, "{}")
 		assert.Nil(t, err)
 	})
 
