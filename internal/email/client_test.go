@@ -4,8 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"os"
 	"strconv"
@@ -24,6 +26,14 @@ func assertErrorsEqual(t *testing.T, actual, expected error) {
 	} else {
 		assert.Equal(t, expected, actual)
 	}
+}
+
+func setupTestServer(t *testing.T, handlerFunc http.HandlerFunc) *httptest.Server {
+	ts := httptest.NewServer(handlerFunc)
+	t.Cleanup(func() {
+		ts.Close()
+	})
+	return ts
 }
 
 func TestGetEndpoint(t *testing.T) {
@@ -55,6 +65,11 @@ func TestGetEndpoint(t *testing.T) {
 }
 
 func TestClient_Request(t *testing.T) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		_, err := fmt.Fprintln(w, "Request received")
+		assert.Nil(t, err)
+	})
+
 	timeoutCtx, cancel := context.WithTimeout(context.Background(), time.Nanosecond) // used by one test case
 	defer cancel()
 	defer func() {
@@ -74,7 +89,7 @@ func TestClient_Request(t *testing.T) {
 		{
 			ctx: context.Background(),
 			client: Client{
-				Endpoint: "https://httpbin.org",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
