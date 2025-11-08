@@ -65,6 +65,11 @@ func TestGetEndpoint(t *testing.T) {
 
 func TestClient_Request(t *testing.T) {
 	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		if r.URL.Path == "/text" {
+			w.Write([]byte("plain text response"))
+			return
+		}
+
 		response := map[string]any{
 			"headers": map[string]any{
 				"Authorization": r.Header.Get("Authorization"),
@@ -234,11 +239,6 @@ func TestClient_List(t *testing.T) {
 	}()
 
 	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path == "/text" {
-			w.Write([]byte("plain text response"))
-			return
-		}
-
 		args := map[string]any{}
 		for key, values := range r.URL.Query() {
 			if len(values) == 1 {
@@ -291,7 +291,7 @@ func TestClient_List(t *testing.T) {
 		},
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
