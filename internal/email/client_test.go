@@ -990,6 +990,16 @@ func TestSaveOptions_LoadFile(t *testing.T) {
 }
 
 func TestClient_Save(t *testing.T) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client  Client
 		options SaveOptions
@@ -997,7 +1007,7 @@ func TestClient_Save(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
@@ -1071,6 +1081,16 @@ func TestSendOptions_Check(t *testing.T) {
 }
 
 func TestClient_Send(t *testing.T) {
+	ts := setupTestServer(t, func(w http.ResponseWriter, r *http.Request) {
+		response := map[string]any{
+			"headers": map[string]any{
+				"Authorization": r.Header.Get("Authorization"),
+			},
+		}
+		err := json.NewEncoder(w).Encode(response)
+		assert.Nil(t, err)
+	})
+
 	tests := []struct {
 		client  Client
 		options SendOptions
@@ -1078,7 +1098,7 @@ func TestClient_Send(t *testing.T) {
 	}{
 		{
 			client: Client{
-				Endpoint: "https://httpbin.org/anything",
+				Endpoint: ts.URL,
 				Credentials: aws.CredentialsProviderFunc(func(context.Context) (aws.Credentials, error) {
 					return aws.Credentials{}, nil
 				}),
