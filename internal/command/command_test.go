@@ -11,6 +11,8 @@ import (
 )
 
 func setupTestServer(t *testing.T, handlerFunc http.HandlerFunc) *httptest.Server {
+	t.Setenv("AWS_ACCESS_KEY_ID", "test")
+	t.Setenv("AWS_SECRET_ACCESS_KEY", "test")
 	ts := httptest.NewServer(handlerFunc)
 	t.Cleanup(func() {
 		ts.Close()

@@ -14,46 +14,11 @@ permissions:
   contents: read
 
 jobs:
-  go-tests:
+  go-test:
     name: Go Unit Tests
     permissions:
       id-token: write
       contents: read
-    strategy:
-      matrix:
-        os: [ubuntu-latest, macos-15, macos-26]
-        go-version: ["1.27"]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
-        with:
-          egress-policy: audit
-
-      - name: Checkout
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-
-      - name: Set up Go
-        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
-        with:
-          go-version: ${{ matrix.go-version }}
-          check-latest: true
-
-      - name: Build
-        run: go build -v ./...
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-west-2
-
-      - name: Test with coverage
-        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@303a32d7a59b442fa8d48b6a1cc6825c09c847a5 # v7.1.1
-        with:
-          files: ./coverage.txt
-          use_oidc: true
+    uses: harryzcy/github-actions/.github/workflows/go.yml@35957b2f1b0ab01fdbca00af3adbbbbdcb3fa5c2 # main
+    with:
+      latest: 1
