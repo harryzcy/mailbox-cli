@@ -11,29 +11,6 @@ permissions:
 jobs:
   release:
     name: Release on GitHub
-    runs-on: ubuntu-latest
     permissions:
       contents: write
-    steps:
-      - name: Harden Runner
-        uses: step-security/harden-runner@dc2769abcc0fcfbadfc1df54081c1608579ef6b2 # v2.22.2
-        with:
-          egress-policy: audit
-
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: release-drafter/release-drafter@978bb0b30c5ee8cdd332ced253758157150d43f0 # v7.10.0
-        id: release_drafter
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish Release
-        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
-        with:
-          script: |
-            await github.rest.repos.updateRelease({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              release_id: ${{ steps.release_drafter.outputs.id }},
-              tag_name: '${{ github.ref_name }}',
-              name: 'Release ${{ github.ref_name }}',
-              draft: context.eventName != 'push'
-            });
+    uses: harryzcy/github-actions/.github/workflows/release.yml@35957b2f1b0ab01fdbca00af3adbbbbdcb3fa5c2 # main
