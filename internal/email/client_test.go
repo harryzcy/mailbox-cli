@@ -28,7 +28,6 @@ func assertErrorsEqual(t *testing.T, actual, expected error) {
 }
 
 func setupTestServer(t *testing.T, handlerFunc http.HandlerFunc) *httptest.Server {
-	// requests are signed before reaching the test server, so any credentials work
 	t.Setenv("AWS_ACCESS_KEY_ID", "test")
 	t.Setenv("AWS_SECRET_ACCESS_KEY", "test")
 	ts := httptest.NewServer(handlerFunc)
