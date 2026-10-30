@@ -21,4 +21,4 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-    uses: harryzcy/github-actions/.github/workflows/release-drafter.yml@35957b2f1b0ab01fdbca00af3adbbbbdcb3fa5c2 # main
+    uses: harryzcy/github-actions/.github/workflows/release-drafter.yml@3a76505b9efdf647779efb9ad133c5f8b6c32c6b # main
